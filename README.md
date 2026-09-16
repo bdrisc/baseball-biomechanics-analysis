@@ -39,7 +39,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 
 ### 4. Posture Loss and Contact-Point Consistency
 
-- The notebook computes post-plant posture loss, peak-tilt timing, normalized hand position at contact, and HitTrax point-of-impact depth variability.
+- The notebook computes post-plant posture loss, time to peak trunk tilt, normalized hand position at contact, and HitTrax point-of-impact depth variability.
 - The primary analysis aggregates swing-level metrics by athlete-session, retains sessions with at least five complete swings, and reports Spearman associations with athlete-level bootstrap intervals.
 - The study is intentionally framed as an association and variability analysis. It does not label cut balls, measure true smash factor, or claim causation.
 - Results are generated when the notebook is run locally because raw OpenBiomechanics data are excluded from this repository.
