@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains three applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, and hitting posture using processed motion-capture data.
+This repository contains four applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, and contact-point consistency using processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -11,6 +11,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Kinematic Sequencing and Velocity | Do segment timing and sequencing efficiency differ between higher- and lower-velocity pitchers? | Pitching joint angular velocities, POI metrics, and metadata | [View notebook](notebooks/pitching/01_kinematic_sequencing.ipynb) |
 | Trunk Stability and Release Consistency | Is greater trunk-angle variability at ball release associated with greater release-point dispersion? | Pitching joint angles, landmarks, and metadata | [View notebook](notebooks/pitching/02_trunk_stability_release.ipynb) |
 | Hinge Integrity During the Stride | How much does the upper-body-to-thigh hinge angle change from pre-stride through front-foot plant? | Hitting landmarks and metadata | [View notebook](notebooks/hitting/03_hinge_integrity.ipynb) |
+| Posture Loss and Contact-Point Consistency | Is greater post-plant posture loss associated with more variable hand position and HitTrax point-of-impact depth at contact? | Hitting landmarks, POI metrics, and HitTrax data | [View notebook](notebooks/hitting/04_posture_contact_consistency.ipynb) |
 
 ## Key Findings
 
@@ -36,6 +37,13 @@ The purpose of the project is to turn biomechanical time-series data into interp
 - Forty-eight percent of swings opened by more than 5 degrees, 31.2% remained within plus or minus 5 degrees, and 20.8% closed by more than 5 degrees.
 - Athlete-level hinge change had exploratory correlations of `r = 0.25` with exit velocity and `r = 0.19` with bat speed. These associations are descriptive and should not be interpreted as causal.
 
+### 4. Posture Loss and Contact-Point Consistency
+
+- The notebook computes post-plant posture loss, time to peak trunk tilt, normalized hand position at contact, and HitTrax point-of-impact depth variability.
+- The primary analysis aggregates swing-level metrics by athlete-session, retains sessions with at least five complete swings, and reports Spearman associations with athlete-level bootstrap intervals.
+- The study is intentionally framed as an association and variability analysis. It does not label cut balls, measure true smash factor, or claim causation.
+- Results are generated when the notebook is run locally because raw OpenBiomechanics data are excluded from this repository.
+
 ## Repository Structure
 
 ```text
@@ -45,7 +53,8 @@ baseball-biomechanics-analysis/
 │   │   ├── 01_kinematic_sequencing.ipynb
 │   │   └── 02_trunk_stability_release.ipynb
 │   └── hitting/
-│       └── 03_hinge_integrity.ipynb
+│       ├── 03_hinge_integrity.ipynb
+│       └── 04_posture_contact_consistency.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -72,7 +81,7 @@ jupyter lab
 
 Download the required OpenBiomechanics files separately and place them under `data/raw/pitching/` and `data/raw/hitting/`. Exact filenames and locations are documented in [data/README.md](data/README.md). Raw data are intentionally excluded from this repository.
 
-Run the notebooks in numerical order. Each notebook contains its executed outputs and figures so the analyses can also be reviewed directly on GitHub.
+Run the notebooks in numerical order. The first three notebooks contain executed outputs and figures. The fourth notebook includes the complete reproducible workflow and can be executed locally after the additional hitting POI and HitTrax files are available; raw data are not committed.
 
 ## Methods and Interpretation
 

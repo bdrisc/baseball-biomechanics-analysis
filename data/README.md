@@ -15,7 +15,9 @@ data/
     │   └── landmarks.csv
     └── hitting/
         ├── metadata.csv
-        └── landmarks.csv
+        ├── landmarks.csv
+        ├── poi_metrics.csv
+        └── hittrax.csv
 ```
 
 | Local file | Official source |
@@ -27,15 +29,19 @@ data/
 | `data/raw/pitching/landmarks.csv` | Extract `pitching_landmarks.zip` from Dataset v1 |
 | `data/raw/hitting/metadata.csv` | `baseball_hitting/data/metadata.csv` |
 | `data/raw/hitting/landmarks.csv` | Extract `hitting_landmarks.zip` from Dataset v1 |
+| `data/raw/hitting/poi_metrics.csv` | `baseball_hitting/data/poi/poi_metrics.csv` |
+| `data/raw/hitting/hittrax.csv` | `baseball_hitting/data/poi/hittrax.csv` |
 
 The pitching and hitting files named `metadata.csv` and `landmarks.csv` are different datasets. Keep each file in its corresponding discipline folder.
 
-The raw C3D archives, force-plate tables, media files, and other full-signal tables are not required for these three notebooks.
+The posture/contact study also uses the hitting POI and HitTrax tables. HitTrax `poi_z` is treated as a point-of-impact depth coordinate, not as hand depth.
+
+The raw C3D archives, force-plate tables, media files, and other full-signal tables are not required for these four notebooks.
 
 ## Data Relationships
 
 - Pitching tables join on `session_pitch`.
-- Hitting tables join on `session_swing`.
+- Hitting landmarks, POI, and HitTrax tables join on `session_swing`.
 - Full-signal tables also use `time` for within-trial observations.
 
 ## Data Use
