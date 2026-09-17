@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains four applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, and contact-point consistency using processed motion-capture and point-of-impact data.
+This repository contains five applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, and the timing of posture change relative to rotation using processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -12,6 +12,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Trunk Stability and Release Consistency | Is greater trunk-angle variability at ball release associated with greater release-point dispersion? | Pitching joint angles, landmarks, and metadata | [View notebook](notebooks/pitching/02_trunk_stability_release.ipynb) |
 | Hinge Integrity During the Stride | How much does the upper-body-to-thigh hinge angle change from pre-stride through front-foot plant? | Hitting landmarks and metadata | [View notebook](notebooks/hitting/03_hinge_integrity.ipynb) |
 | Posture Loss and Contact-Point Consistency | Is greater post-plant posture loss associated with more variable hand position and HitTrax point-of-impact depth at contact? | Hitting landmarks, POI metrics, and HitTrax data | [View notebook](notebooks/hitting/04_posture_contact_consistency.ipynb) |
+| Uprighting Velocity and Rotational Timing | How quickly do hitters change torso and pelvis posture after foot plant, and when do those peaks occur relative to axial rotation? | Hitting joint angles, joint angular velocities, POI metrics, and metadata | [View notebook](notebooks/hitting/05_uprighting_velocity.ipynb) |
 
 ## Key Findings
 
@@ -42,7 +43,15 @@ The purpose of the project is to turn biomechanical time-series data into interp
 - The notebook computes post-plant posture loss, time to peak trunk tilt, normalized hand position at contact, and HitTrax point-of-impact depth variability.
 - The primary analysis aggregates swing-level metrics by athlete-session, retains sessions with at least five complete swings, and reports Spearman associations with athlete-level bootstrap intervals.
 - The study is intentionally framed as an association and variability analysis. It does not label cut balls, measure true smash factor, or claim causation.
-- Results are generated when the notebook is run locally because raw OpenBiomechanics data are excluded from this repository.
+- In this sample, posture loss was not meaningfully related to hand-contact variability. Time to peak trunk tilt had a small positive association with HitTrax depth variability (`rho = 0.258`, unadjusted `p = 0.022`), but the result is exploratory and was one of three tested relationships.
+
+### 5. Uprighting Velocity and Rotational Timing
+
+- Of 677 available swings, 615 swings from 93 athletes met the event-window and signal-quality requirements. Eighty-four athlete-sessions contained at least five retained swings for the outcome analysis.
+- Median peak torso uprighting velocity was 484.3 degrees per second; median peak pelvis posterior-tilt velocity was 353.0 degrees per second.
+- The median torso uprighting peak occurred 33.3 ms after peak torso axial rotation. Uprighting lagged rotation by more than 20 ms in 72.8% of swings, occurred within plus or minus 20 ms in 26.2%, and led by more than 20 ms in 1.0%.
+- Peak torso uprighting speed was not clearly related to bat speed, exit velocity, or attack angle. A later uprighting peak relative to rotation had a modest association with bat speed (`rho = 0.284`, unadjusted `p = 0.009`, FDR-adjusted `q = 0.053`) and is treated as exploratory.
+- Results were stable across 8 Hz, 12 Hz, and 16 Hz filter choices: peak-speed rank correlations were 0.986–0.998 and median absolute timing differences were 0.0–2.7 ms.
 
 ## Repository Structure
 
@@ -54,7 +63,8 @@ baseball-biomechanics-analysis/
 │   │   └── 02_trunk_stability_release.ipynb
 │   └── hitting/
 │       ├── 03_hinge_integrity.ipynb
-│       └── 04_posture_contact_consistency.ipynb
+│       ├── 04_posture_contact_consistency.ipynb
+│       └── 05_uprighting_velocity.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -81,7 +91,7 @@ jupyter lab
 
 Download the required OpenBiomechanics files separately and place them under `data/raw/pitching/` and `data/raw/hitting/`. Exact filenames and locations are documented in [data/README.md](data/README.md). Raw data are intentionally excluded from this repository.
 
-Run the notebooks in numerical order. The first three notebooks contain executed outputs and figures. The fourth notebook includes the complete reproducible workflow and can be executed locally after the additional hitting POI and HitTrax files are available; raw data are not committed.
+Run the notebooks in numerical order. Each notebook contains executed outputs and the complete reproducible workflow. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
 
 ## Methods and Interpretation
 
