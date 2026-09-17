@@ -16,6 +16,8 @@ data/
     └── hitting/
         ├── metadata.csv
         ├── landmarks.csv
+        ├── joint_angles.csv
+        ├── joint_velos.csv
         ├── poi_metrics.csv
         └── hittrax.csv
 ```
@@ -29,6 +31,8 @@ data/
 | `data/raw/pitching/landmarks.csv` | Extract `pitching_landmarks.zip` from Dataset v1 |
 | `data/raw/hitting/metadata.csv` | `baseball_hitting/data/metadata.csv` |
 | `data/raw/hitting/landmarks.csv` | Extract `hitting_landmarks.zip` from Dataset v1 |
+| `data/raw/hitting/joint_angles.csv` | Extract `hitting_joint_angles.zip` from Dataset v1 |
+| `data/raw/hitting/joint_velos.csv` | Extract `hitting_joint_velos.zip` from Dataset v1 |
 | `data/raw/hitting/poi_metrics.csv` | `baseball_hitting/data/poi/poi_metrics.csv` |
 | `data/raw/hitting/hittrax.csv` | `baseball_hitting/data/poi/hittrax.csv` |
 
@@ -36,7 +40,9 @@ The pitching and hitting files named `metadata.csv` and `landmarks.csv` are diff
 
 The posture/contact study also uses the hitting POI and HitTrax tables. HitTrax `poi_z` is treated as a point-of-impact depth coordinate, not as hand depth.
 
-The raw C3D archives, force-plate tables, media files, and other full-signal tables are not required for these four notebooks.
+The uprighting-velocity study uses the hitting joint-angle and joint-velocity tables. It differentiates filtered pelvis and torso X angles for posture-change rates and uses the official Z-axis angular velocities to locate axial-rotation peaks.
+
+The raw C3D archives, force-plate tables, media files, and other full-signal tables are not required for these five notebooks.
 
 ## Data Relationships
 
