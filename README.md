@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains five applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, and the timing of posture change relative to rotation using processed motion-capture and point-of-impact data.
+This repository contains six applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, and hitting pelvis–torso rotation onset using processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -13,6 +13,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Hinge Integrity During the Stride | How much does the upper-body-to-thigh hinge angle change from pre-stride through front-foot plant? | Hitting landmarks and metadata | [View notebook](notebooks/hitting/03_hinge_integrity.ipynb) |
 | Posture Loss and Contact-Point Consistency | Is greater post-plant posture loss associated with more variable hand position and HitTrax point-of-impact depth at contact? | Hitting landmarks, POI metrics, and HitTrax data | [View notebook](notebooks/hitting/04_posture_contact_consistency.ipynb) |
 | Uprighting Velocity and Rotational Timing | How quickly do hitters change torso and pelvis posture after foot plant, and when do those peaks occur relative to axial rotation? | Hitting joint angles, joint angular velocities, POI metrics, and metadata | [View notebook](notebooks/hitting/05_uprighting_velocity.ipynb) |
+| Pelvis–Torso Separation Timing | How long does the pelvis rotate before the torso begins sustained rotation toward the mound? | Hitting joint angles and metadata | [View notebook](notebooks/hitting/06_pelvis_torso_separation_timing.ipynb) |
 
 ## Key Findings
 
@@ -53,6 +54,13 @@ The purpose of the project is to turn biomechanical time-series data into interp
 - Peak torso uprighting speed was not clearly related to bat speed, exit velocity, or attack angle. A later uprighting peak relative to rotation had a modest association with bat speed (`rho = 0.284`, unadjusted `p = 0.009`, FDR-adjusted `q = 0.053`) and is treated as exploratory.
 - Results were stable across 8 Hz, 12 Hz, and 16 Hz filter choices: peak-speed rank correlations were 0.986–0.998 and median absolute timing differences were 0.0–2.7 ms.
 
+### 6. Pelvis–Torso Separation Timing
+
+- An exploratory notebook detects sustained pelvis and torso axial rotation onset using filtered joint-angle time series and reports the signed onset lag and positive-only separation window.
+- Of 677 available swings, 615 from 93 athletes passed the event and signal filters. The pelvis reached the sustained rotation threshold first in 614 swings; one was torso first. Median pelvis-first onset lag and the median of athlete-level medians were both 50.0 ms.
+- With 8–16 Hz filters, the median signed lag was 50.0–52.8 ms and 99.7–100% of retained swings were classified pelvis first. Changing the tested absolute rate floor from 40 to 80 degrees per second did not change the retained count or median at a given cutoff.
+- Plots show angles and angular rates with onset markers, sampled row indices, and front-foot contact/plant/ball-contact events. These are sample descriptions under a specific onset threshold; they do not establish an ideal separation window or a causal relation to hitting performance.
+
 ## Repository Structure
 
 ```text
@@ -64,7 +72,8 @@ baseball-biomechanics-analysis/
 │   └── hitting/
 │       ├── 03_hinge_integrity.ipynb
 │       ├── 04_posture_contact_consistency.ipynb
-│       └── 05_uprighting_velocity.ipynb
+│       ├── 05_uprighting_velocity.ipynb
+│       └── 06_pelvis_torso_separation_timing.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
