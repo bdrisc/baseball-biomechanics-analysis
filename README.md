@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains five applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, and the timing of posture change relative to rotation using processed motion-capture and point-of-impact data.
+This repository contains six applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, and the timing of posture change relative to rotation, and hitting pelvis–torso rotation onset using processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -13,6 +13,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Hinge Integrity During the Stride | How much does the upper-body-to-thigh hinge angle change from pre-stride through front-foot plant? | Hitting landmarks and metadata | [View notebook](notebooks/hitting/03_hinge_integrity.ipynb) |
 | Posture Loss and Contact-Point Consistency | Is greater post-plant posture loss associated with more variable hand position and HitTrax point-of-impact depth at contact? | Hitting landmarks, POI metrics, and HitTrax data | [View notebook](notebooks/hitting/04_posture_contact_consistency.ipynb) |
 | Uprighting Velocity and Rotational Timing | How quickly do hitters change torso and pelvis posture after foot plant, and when do those peaks occur relative to axial rotation? | Hitting joint angles, joint angular velocities, POI metrics, and metadata | [View notebook](notebooks/hitting/05_uprighting_velocity.ipynb) |
+| Pelvis–Torso Separation Timing | How long does the pelvis rotate before the torso begins sustained rotation toward the mound? | Hitting joint angles and metadata | [View notebook](notebooks/hitting/06_pelvis_torso_separation_timing.ipynb) |
 
 ## Key Findings
 
@@ -53,6 +54,12 @@ The purpose of the project is to turn biomechanical time-series data into interp
 - Peak torso uprighting speed was not clearly related to bat speed, exit velocity, or attack angle. A later uprighting peak relative to rotation had a modest association with bat speed (`rho = 0.284`, unadjusted `p = 0.009`, FDR-adjusted `q = 0.053`) and is treated as exploratory.
 - Results were stable across 8 Hz, 12 Hz, and 16 Hz filter choices: peak-speed rank correlations were 0.986–0.998 and median absolute timing differences were 0.0–2.7 ms.
 
+### 6. Pelvis–Torso Separation Timing
+
+- An exploratory notebook detects sustained pelvis and torso axial rotation onset using filtered joint-angle time series and reports the signed onset lag and positive-only separation window.
+- It plots angles and angular rates with onset markers, sampled frame indices, and foot contact/plant/contact events; cutoff and threshold sensitivity is included.
+- Run the notebook with OBP Dataset v1 to produce sample findings. No outcome or optimal-timing claim is made from the unexecuted notebook.
+
 ## Repository Structure
 
 ```text
@@ -64,7 +71,8 @@ baseball-biomechanics-analysis/
 │   └── hitting/
 │       ├── 03_hinge_integrity.ipynb
 │       ├── 04_posture_contact_consistency.ipynb
-│       └── 05_uprighting_velocity.ipynb
+│       ├── 05_uprighting_velocity.ipynb
+│       └── 06_pelvis_torso_separation_timing.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -91,7 +99,7 @@ jupyter lab
 
 Download the required OpenBiomechanics files separately and place them under `data/raw/pitching/` and `data/raw/hitting/`. Exact filenames and locations are documented in [data/README.md](data/README.md). Raw data are intentionally excluded from this repository.
 
-Run the notebooks in numerical order. Each notebook contains executed outputs and the complete reproducible workflow. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
+Run the notebooks in numerical order. Notebooks 01–05 contain executed outputs; notebook 06 is an unexecuted reproducible workflow pending a run with the raw data. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
 
 ## Methods and Interpretation
 
