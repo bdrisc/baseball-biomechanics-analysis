@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains six applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, and the timing of posture change relative to rotation, and hitting pelvis–torso rotation onset using processed motion-capture and point-of-impact data.
+This repository contains six applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, and hitting pelvis–torso rotation onset using processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -57,8 +57,9 @@ The purpose of the project is to turn biomechanical time-series data into interp
 ### 6. Pelvis–Torso Separation Timing
 
 - An exploratory notebook detects sustained pelvis and torso axial rotation onset using filtered joint-angle time series and reports the signed onset lag and positive-only separation window.
-- It plots angles and angular rates with onset markers, sampled frame indices, and foot contact/plant/contact events; cutoff and threshold sensitivity is included.
-- Run the notebook with OBP Dataset v1 to produce sample findings. No outcome or optimal-timing claim is made from the unexecuted notebook.
+- Of 677 available swings, 615 from 93 athletes passed the event and signal filters. The pelvis reached the sustained rotation threshold first in 614 swings; one was torso first. Median pelvis-first onset lag and the median of athlete-level medians were both 50.0 ms.
+- With 8–16 Hz filters, the median signed lag was 50.0–52.8 ms and 99.7–100% of retained swings were classified pelvis first. Changing the tested absolute rate floor from 40 to 80 degrees per second did not change the retained count or median at a given cutoff.
+- Plots show angles and angular rates with onset markers, sampled row indices, and front-foot contact/plant/ball-contact events. These are sample descriptions under a specific onset threshold; they do not establish an ideal separation window or a causal relation to hitting performance.
 
 ## Repository Structure
 
@@ -99,7 +100,7 @@ jupyter lab
 
 Download the required OpenBiomechanics files separately and place them under `data/raw/pitching/` and `data/raw/hitting/`. Exact filenames and locations are documented in [data/README.md](data/README.md). Raw data are intentionally excluded from this repository.
 
-Run the notebooks in numerical order. Notebooks 01–05 contain executed outputs; notebook 06 is an unexecuted reproducible workflow pending a run with the raw data. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
+Run the notebooks in numerical order. Each notebook contains executed outputs and the complete reproducible workflow. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
 
 ## Methods and Interpretation
 
