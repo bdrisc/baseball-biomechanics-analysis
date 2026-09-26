@@ -42,7 +42,9 @@ The posture/contact study also uses the hitting POI and HitTrax tables. HitTrax 
 
 The uprighting-velocity study uses the hitting joint-angle and joint-velocity tables. It differentiates filtered pelvis and torso X angles for posture-change rates and uses the official Z-axis angular velocities to locate axial-rotation peaks.
 
-The raw C3D archives, force-plate tables, media files, and other full-signal tables are not required for these five notebooks.
+The pelvis–torso separation-timing study uses the hitting joint-angle and metadata tables. Its frame annotations identify rows in the sampled joint-angle CSV, not synchronized video frames.
+
+The raw C3D archives, force-plate tables, media files, and other full-signal tables are not required for these six notebooks.
 
 ## Data Relationships
 
