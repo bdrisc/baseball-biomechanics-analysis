@@ -8,7 +8,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 
 | Study | Research question | Primary data | Notebook |
 |---|---|---|---|
-| Kinematic Sequencing and Velocity | Do segment timing and sequencing efficiency differ between higher- and lower-velocity pitchers? | Pitching joint angular velocities, POI metrics, and metadata | [View notebook](notebooks/pitching/01_kinematic_sequencing.ipynb) |
+| Kinematic Sequencing and Velocity | How do directional rotation peaks, signed timing gaps, and observed sequence order relate to fastball velocity? | Pitching joint angular velocities, POI metrics, and metadata | [View notebook](notebooks/pitching/01_kinematic_sequencing.ipynb) |
 | Trunk Stability and Release Consistency | Is greater trunk-angle variability at ball release associated with greater release-point dispersion? | Pitching joint angles, landmarks, and metadata | [View notebook](notebooks/pitching/02_trunk_stability_release.ipynb) |
 | Hinge Integrity During the Stride | How much does the upper-body-to-thigh hinge angle change from pre-stride through front-foot plant? | Hitting landmarks and metadata | [View notebook](notebooks/hitting/03_hinge_integrity.ipynb) |
 | Posture Loss and Contact-Point Consistency | Is greater post-plant posture loss associated with more variable hand position and HitTrax point-of-impact depth at contact? | Hitting landmarks, POI metrics, and HitTrax data | [View notebook](notebooks/hitting/04_posture_contact_consistency.ipynb) |
@@ -19,10 +19,11 @@ The purpose of the project is to turn biomechanical time-series data into interp
 
 ### 1. Kinematic Sequencing and Velocity
 
-- The higher-velocity group averaged a 21.56 ms pelvis-to-torso delay, compared with 19.36 ms for the lower-velocity group.
-- Sequencing efficiency averaged 2.858 in the higher-velocity group and 2.809 in the lower-velocity group.
-- Pitcher-level velocity was not significantly related to pelvis-to-torso delay (`r = 0.033`, `p = 0.5998`) or sequencing efficiency (`r = 0.104`, `p = 0.0930`).
-- The analysis retains pitches whose detected peaks occur in pelvis-torso-arm order. Results therefore describe timing within correctly ordered sequences rather than the prevalence of sequencing breakdowns.
+- A clean run on the official Dataset v1 pitching files retained 402 of 411 fastballs from 100 pitchers. Eight had missing foot-plant events; one had foot plant after release. All valid peak orders and signed timing gaps are retained.
+- Pelvis and torso rotation peaks are measured between foot plant and ball release. The shoulder internal-rotation peak is measured through 50 ms after release because 155 retained pitches peak in that extension. Fifteen retained pitches have a peak at a search-window boundary. The plotted curves remain normalized between foot plant and release.
+- Shoulder internal rotation is a joint-level proxy, not upper-arm segment rotation. The selected positive shoulder velocity peak matches the official point-of-interest shoulder-IR measure (median absolute difference 0.0 deg/s). The pelvis-to-torso gap likewise matches the OBP timing field (median absolute difference 0.0 ms).
+- The pitcher-weighted rate of observed pelvis–torso–shoulder-IR order was 75.3% in the higher-velocity group and 70.2% in the lower-velocity group. The bootstrap 95% interval for their 5.1 percentage-point difference was approximately -11 to +20 points. Pelvis-to-torso timing had little correlation with pitcher mean fastball velocity (`r = 0.028`, `p = 0.783`).
+- Peak torso and shoulder internal-rotation velocities had exploratory positive pitcher-level correlations with pitch velocity (`r = 0.323` and `r = 0.292`, respectively). These multiple descriptive comparisons do not establish causation or a mechanical prescription.
 
 ### 2. Trunk Stability and Release Consistency
 
@@ -100,7 +101,7 @@ jupyter lab
 
 Download the required OpenBiomechanics files separately and place them under `data/raw/pitching/` and `data/raw/hitting/`. Exact filenames and locations are documented in [data/README.md](data/README.md). Raw data are intentionally excluded from this repository.
 
-Run the notebooks in numerical order. Each notebook contains executed outputs and the complete reproducible workflow. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
+Run the notebooks in numerical order. The notebooks contain reproducible workflows. The revised sequencing notebook was run against the official Dataset v1 pitching files for the findings above, but its saved outputs are cleared to avoid stale results when users run it on their own local files. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
 
 ## Methods and Interpretation
 
