@@ -19,12 +19,11 @@ The purpose of the project is to turn biomechanical time-series data into interp
 
 ### 1. Kinematic Sequencing and Velocity
 
-- The revised notebook retains all pitches with usable signals and events, including pitches whose detected peaks do not occur in pelvis–torso–shoulder order. It prints the count excluded for each data-quality reason.
-- Peaks are located on the recorded time axis from foot plant to ball release. Pelvis and torso use forward axial rotation; the shoulder measure uses the internal-rotation direction. Shoulder internal rotation is a joint-level proxy, not upper-arm segment angular velocity.
-- Velocity groups are formed from each pitcher's mean fastball velocity before signal filtering. Pitcher-level means, observed sequence-order rates, signed timing gaps, bootstrap group intervals, correlations, and a boundary-peak sensitivity check are reported.
-- A clean run on the official Dataset v1 pitching signals retained 402 of 411 fastballs from 100 pitchers. Eight had missing foot-plant events; one had foot plant after release. Twenty-three retained pitches had at least one peak at a window boundary. The derived pelvis-to-torso gap matched OBP's point-of-interest timing field to the reported precision (median absolute difference 0.0 ms).
-- The pitcher-weighted rate of observed pelvis–torso–shoulder-IR peak order was 52.8% in the higher-velocity group and 39.9% in the lower-velocity group. The bootstrap 95% interval for the 12.9 percentage-point difference was approximately -4 to +30 points. Pelvis-to-torso timing had little correlation with pitcher mean fastball velocity (`r = 0.028`, `p = 0.783`).
-- Peak torso and shoulder internal-rotation velocities had exploratory positive pitcher-level correlations with pitch velocity (`r = 0.323` and `r = 0.326`, respectively). These multiple descriptive comparisons do not establish causation or a mechanical prescription.
+- A clean run on the official Dataset v1 pitching files retained 402 of 411 fastballs from 100 pitchers. Eight had missing foot-plant events; one had foot plant after release. All valid peak orders and signed timing gaps are retained.
+- Pelvis and torso rotation peaks are measured between foot plant and ball release. The shoulder internal-rotation peak is measured through 50 ms after release because 155 retained pitches peak in that extension. Fifteen retained pitches have a peak at a search-window boundary. The plotted curves remain normalized between foot plant and release.
+- Shoulder internal rotation is a joint-level proxy, not upper-arm segment rotation. The selected positive shoulder velocity peak matches the official point-of-interest shoulder-IR measure (median absolute difference 0.0 deg/s). The pelvis-to-torso gap likewise matches the OBP timing field (median absolute difference 0.0 ms).
+- The pitcher-weighted rate of observed pelvis–torso–shoulder-IR order was 75.3% in the higher-velocity group and 70.2% in the lower-velocity group. The bootstrap 95% interval for their 5.1 percentage-point difference was approximately -11 to +20 points. Pelvis-to-torso timing had little correlation with pitcher mean fastball velocity (`r = 0.028`, `p = 0.783`).
+- Peak torso and shoulder internal-rotation velocities had exploratory positive pitcher-level correlations with pitch velocity (`r = 0.323` and `r = 0.292`, respectively). These multiple descriptive comparisons do not establish causation or a mechanical prescription.
 
 ### 2. Trunk Stability and Release Consistency
 
