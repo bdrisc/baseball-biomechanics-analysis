@@ -22,7 +22,9 @@ The purpose of the project is to turn biomechanical time-series data into interp
 - The revised notebook retains all pitches with usable signals and events, including pitches whose detected peaks do not occur in pelvis–torso–shoulder order. It prints the count excluded for each data-quality reason.
 - Peaks are located on the recorded time axis from foot plant to ball release. Pelvis and torso use forward axial rotation; the shoulder measure uses the internal-rotation direction. Shoulder internal rotation is a joint-level proxy, not upper-arm segment angular velocity.
 - Velocity groups are formed from each pitcher's mean fastball velocity before signal filtering. Pitcher-level means, observed sequence-order rates, signed timing gaps, bootstrap group intervals, correlations, and a boundary-peak sensitivity check are reported.
-- The notebook cross-checks its pelvis-to-torso gap against OBP's point-of-interest timing field. Previous numerical results are removed pending a clean run with the locally downloaded processed signals. No pitch-level association is interpreted as a causal mechanical prescription.
+- A clean run on the official Dataset v1 pitching signals retained 402 of 411 fastballs from 100 pitchers. Eight had missing foot-plant events; one had foot plant after release. Twenty-three retained pitches had at least one peak at a window boundary. The derived pelvis-to-torso gap matched OBP's point-of-interest timing field to the reported precision (median absolute difference 0.0 ms).
+- The pitcher-weighted rate of observed pelvis–torso–shoulder-IR peak order was 52.8% in the higher-velocity group and 39.9% in the lower-velocity group. The bootstrap 95% interval for the 12.9 percentage-point difference was approximately -4 to +30 points. Pelvis-to-torso timing had little correlation with pitcher mean fastball velocity (`r = 0.028`, `p = 0.783`).
+- Peak torso and shoulder internal-rotation velocities had exploratory positive pitcher-level correlations with pitch velocity (`r = 0.323` and `r = 0.326`, respectively). These multiple descriptive comparisons do not establish causation or a mechanical prescription.
 
 ### 2. Trunk Stability and Release Consistency
 
@@ -100,7 +102,7 @@ jupyter lab
 
 Download the required OpenBiomechanics files separately and place them under `data/raw/pitching/` and `data/raw/hitting/`. Exact filenames and locations are documented in [data/README.md](data/README.md). Raw data are intentionally excluded from this repository.
 
-Run the notebooks in numerical order. The notebooks contain reproducible workflows. The revised sequencing notebook intentionally has no saved results until it is run with the required local pitching signals. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
+Run the notebooks in numerical order. The notebooks contain reproducible workflows. The revised sequencing notebook was run against the official Dataset v1 pitching files for the findings above, but its saved outputs are cleared to avoid stale results when users run it on their own local files. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
 
 ## Methods and Interpretation
 
