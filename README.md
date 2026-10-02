@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains eight applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation onset, head movement and repeatability, and delivery-phase profiles using raw and processed motion-capture and point-of-impact data.
+This repository contains nine applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation onset, head movement and repeatability, delivery-phase profiles, and swing-phase profiles using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -16,6 +16,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Pelvis–Torso Separation Timing | How long does the pelvis rotate before the torso begins sustained rotation toward the mound? | Hitting joint angles and metadata | [View notebook](notebooks/hitting/06_pelvis_torso_separation_timing.ipynb) |
 | Head Movement, Repeatability & Batted-Ball Outcomes | Are within-session head movement and across-swing head repeatability associated with bat speed, exit velocity, and contact-depth variability? | Hitting C3D head/wrist markers, landmarks, metadata, POI, and HitTrax | [View notebook](notebooks/hitting/07_head_stability_contact_quality.ipynb) |
 | Delivery Phase Profiles & Pitch Velocity | Which pre-release phases add held-out predictive information about fastball velocity, and how do selected joint energy estimates vary by phase? | Pitching angles, angular velocities, energy flow, metadata, and POI | [View notebook](notebooks/pitching/08_pitching_phase_decomposition.ipynb) |
+| Swing Phase Profiles & Bat Speed | Which pre-contact windows add predictive information about bat speed, and how sensitive are results to phase definitions? | Hitting joint angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/09_hitting_phase_decomposition.ipynb) |
 
 ## Key Findings
 
@@ -86,6 +87,16 @@ The [study guide](docs/head_stability.md) explains setup, metric definitions, qu
 
 See the [phase study guide](docs/phase_decomposition.md) for definitions, validation limits, setup, and output descriptions.
 
+### 9. Swing Phase Profiles & Bat Speed
+
+- Uses official foot-contact, foot-plant, and contact events, a fixed 150 ms approach window, and analytical early/late post-plant splits at 40%, 50%, and 60% of plant-to-contact time. Follow-through is descriptive only; these fractions are not annotated swing-initiation events.
+- The primary analysis retained 642 of 677 swings from 97 hitters. Thirty-five swings had missing or unordered official events. Nested validation holds out entire hitters, fits scaling/tuning within training folds, repeats two seeded splits, and weights hitters equally.
+- At the 50% split, contact-bat-speed MAE was 3.28 mph for all phases versus 3.47 mph for body/bat controls. The paired improvement was 0.19 mph with a conditional bootstrap interval of -0.11 to +0.51 mph; additional value over controls is uncertain.
+- Early post-plant features had the largest phase-ablation estimate across the three analytical boundaries in the main sample. Their removal increased MAE by 0.29 mph at the 50% split. After excluding 27 swings outside 80–200 ms plant-to-contact, the estimate fell to 0.03 mph with an interval crossing zero. No robust single phase winner or causal coaching prescription is established.
+- Blast speed (613 swings, 96 hitters) and exit velocity (637 swings, 96 hitters) are separate secondary outcomes. Bat kinematics and post-contact features are not predictors. This study connects posture, separation, and body-joint movement; head-marker analysis remains in study 07.
+
+See the [hitting phase study guide](docs/hitting_phase_decomposition.md) for setup, exact definitions, findings, and limitations.
+
 ## Repository Structure
 
 ```text
@@ -100,7 +111,8 @@ baseball-biomechanics-analysis/
 │       ├── 04_posture_contact_consistency.ipynb
 │       ├── 05_uprighting_velocity.ipynb
 │       ├── 06_pelvis_torso_separation_timing.ipynb
-│       └── 07_head_stability_contact_quality.ipynb
+│       ├── 07_head_stability_contact_quality.ipynb
+│       └── 09_hitting_phase_decomposition.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -130,6 +142,8 @@ Download the required OpenBiomechanics files separately and place them under `da
 Run the notebooks in numerical order. The notebooks contain reproducible workflows. The revised sequencing notebook was run against the official Dataset v1 pitching files for the findings above, but its saved outputs are cleared to avoid stale results when users run it on their own local files. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally. The head-stability notebook requires `ezc3d` and `statsmodels` (included in requirements), downloads roughly 498 MB of C3D and landmark archives on its first run, and reuses local inputs thereafter. Its saved outputs are cleared; running all cells creates the plots and CSV summaries. It also works as a standalone notebook, using the current working directory when the repository is absent.
 
 The phase-decomposition notebook requires `scikit-learn` (included in requirements). It automatically downloads roughly 115 MB of missing processed pitching archives, reuses local files, and runs independently of the earlier notebooks. Saved notebook outputs are cleared.
+
+The hitter phase notebook also uses `scikit-learn`, downloads roughly 155 MB of missing hitting archives, and runs independently. Its code-only notebook has cleared outputs. Running all six cells creates results, profiles, and plots under `results/hitting_phase_decomposition/` and `figures/hitting_phase_decomposition/`.
 
 ## Methods and Interpretation
 

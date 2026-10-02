@@ -235,3 +235,6 @@ results/head_stability/
 
 results/phase_decomposition/
 figures/phase_decomposition/
+
+results/hitting_phase_decomposition/
+figures/hitting_phase_decomposition/
