@@ -44,7 +44,9 @@ The uprighting-velocity study uses the hitting joint-angle and joint-velocity ta
 
 The pelvis–torso separation-timing study uses the hitting joint-angle and metadata tables. Its frame annotations identify rows in the sampled joint-angle CSV, not synchronized video frames.
 
-The raw C3D archives, force-plate tables, media files, and other full-signal tables are not required for these six notebooks.
+The head-stability study additionally uses `hitting_c3d.zip` from Dataset v1, extracted under `data/raw/hitting/c3d/`. It reads four head markers and both wrist-marker pairs with `ezc3d`, and uses `landmarks.csv` for event times and wrist-trajectory validation. The notebook downloads these inputs automatically when absent, verifies official archive hashes, and excludes ambiguous joins. C3D filename swing numbers must not be used directly as processed swing IDs.
+
+The first six studies do not require raw C3Ds. The head-stability study does not require joint-angle or joint-velocity tables. None of the seven notebooks requires force-plate archives or media files.
 
 ## Data Relationships
 

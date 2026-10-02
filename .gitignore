@@ -230,3 +230,5 @@ __pycache__/
 
 # Generated figures
 figures/generated/
+figures/head_stability/
+results/head_stability/
