@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains six applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, and hitting pelvis–torso rotation onset using processed motion-capture and point-of-impact data.
+This repository contains seven applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation onset, and head movement and repeatability using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -14,6 +14,8 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Posture Loss and Contact-Point Consistency | Is greater post-plant posture loss associated with more variable hand position and HitTrax point-of-impact depth at contact? | Hitting landmarks, POI metrics, and HitTrax data | [View notebook](notebooks/hitting/04_posture_contact_consistency.ipynb) |
 | Uprighting Velocity and Rotational Timing | How quickly do hitters change torso and pelvis posture after foot plant, and when do those peaks occur relative to axial rotation? | Hitting joint angles, joint angular velocities, POI metrics, and metadata | [View notebook](notebooks/hitting/05_uprighting_velocity.ipynb) |
 | Pelvis–Torso Separation Timing | How long does the pelvis rotate before the torso begins sustained rotation toward the mound? | Hitting joint angles and metadata | [View notebook](notebooks/hitting/06_pelvis_torso_separation_timing.ipynb) |
+
+| Head Movement, Repeatability & Batted-Ball Outcomes | Are within-session head movement and across-swing head repeatability associated with bat speed, exit velocity, and contact-depth variability? | Hitting C3D head/wrist markers, landmarks, metadata, POI, and HitTrax | [View notebook](notebooks/hitting/07_head_stability_contact_quality.ipynb) |
 
 ## Key Findings
 
@@ -62,6 +64,17 @@ The purpose of the project is to turn biomechanical time-series data into interp
 - With 8–16 Hz filters, the median signed lag was 50.0–52.8 ms and 99.7–100% of retained swings were classified pelvis first. Changing the tested absolute rate floor from 40 to 80 degrees per second did not change the retained count or median at a given cutoff.
 - Plots show angles and angular rates with onset markers, sampled row indices, and front-foot contact/plant/ball-contact events. These are sample descriptions under a specific onset threshold; they do not establish an ideal separation window or a causal relation to hitting performance.
 
+### 7. Head Movement, Repeatability & Batted-Ball Outcomes
+
+- The notebook estimates translation using the centroid of four head markers (`LFHD`, `RFHD`, `LBHD`, `RBHD`). It separates movement within a swing from repeatability across swings; it does not measure gaze, head orientation, or true contact efficiency.
+- C3D filename swing numbers do not always equal processed `session_swing` IDs. Joins require athlete/session/handedness agreement, identical frame counts and time grids, and a close match between C3D wrist-marker midpoints and processed wrist-center trajectories. Ambiguous or unmatched trials are excluded and audited.
+- A full Dataset v1 run matched 669 C3D trials to the 677 processed swings and retained 624 swings from 96 athletes after event and marker-quality checks. At 12 Hz, median maximum head displacement from foot plant through contact was 6.09 cm.
+- The primary model compared 581 complete swings within 83 athlete-sessions, accounting for bat speed at contact. The estimated exit-velocity difference was +0.12 mph per additional one percentage point of body-height-normalized head displacement, with an athlete-bootstrap 95% interval of -0.26 to +0.49 mph. This sample did not show a clear relationship between greater head displacement and exit velocity conditional on bat speed.
+- Head-trajectory repeatability and exit-velocity variability had a weak session-level association (`rho = 0.138`, bootstrap 95% interval -0.092 to +0.355). Contact-depth variability had an exploratory positive association (`rho = 0.261`, interval +0.034 to +0.459), but pitch location can also affect contact depth. These findings do not establish an ideal head movement or a causal coaching prescription.
+- Movement rankings were stable across 8, 12, and 16 Hz filters (rank correlations at least 0.997 for the tested metrics). The notebook also checks four-, five-, and six-swing minimums for repeatability estimates.
+
+The [study guide](docs/head_stability.md) explains setup, metric definitions, quality checks, model interpretation, and generated outputs.
+
 ## Repository Structure
 
 ```text
@@ -74,7 +87,8 @@ baseball-biomechanics-analysis/
 │       ├── 03_hinge_integrity.ipynb
 │       ├── 04_posture_contact_consistency.ipynb
 │       ├── 05_uprighting_velocity.ipynb
-│       └── 06_pelvis_torso_separation_timing.ipynb
+│       ├── 06_pelvis_torso_separation_timing.ipynb
+│       └── 07_head_stability_contact_quality.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -101,7 +115,7 @@ jupyter lab
 
 Download the required OpenBiomechanics files separately and place them under `data/raw/pitching/` and `data/raw/hitting/`. Exact filenames and locations are documented in [data/README.md](data/README.md). Raw data are intentionally excluded from this repository.
 
-Run the notebooks in numerical order. The notebooks contain reproducible workflows. The revised sequencing notebook was run against the official Dataset v1 pitching files for the findings above, but its saved outputs are cleared to avoid stale results when users run it on their own local files. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally.
+Run the notebooks in numerical order. The notebooks contain reproducible workflows. The revised sequencing notebook was run against the official Dataset v1 pitching files for the findings above, but its saved outputs are cleared to avoid stale results when users run it on their own local files. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally. The head-stability notebook requires `ezc3d` and `statsmodels` (included in requirements), downloads roughly 498 MB of C3D and landmark archives on its first run, and reuses local inputs thereafter. Its saved outputs are cleared; running all cells creates the plots and CSV summaries. It also works as a standalone notebook, using the current working directory when the repository is absent.
 
 ## Methods and Interpretation
 
