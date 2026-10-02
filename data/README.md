@@ -46,7 +46,7 @@ The pelvis–torso separation-timing study uses the hitting joint-angle and meta
 
 The head-stability study additionally uses `hitting_c3d.zip` from Dataset v1, extracted under `data/raw/hitting/c3d/`. It reads four head markers and both wrist-marker pairs with `ezc3d`, and uses `landmarks.csv` for event times and wrist-trajectory validation. The notebook downloads these inputs automatically when absent, verifies official archive hashes, and excludes ambiguous joins. C3D filename swing numbers must not be used directly as processed swing IDs.
 
-The first six studies do not require raw C3Ds. The head-stability study does not require joint-angle or joint-velocity tables. None of the eight notebooks requires force-plate archives or media files.
+The first six studies do not require raw C3Ds. The head-stability study does not require joint-angle or joint-velocity tables. None of the nine notebooks requires force-plate archives or media files.
 
 ## Data Relationships
 
@@ -72,3 +72,22 @@ Full-signal columns containing `energy_generated` and `energy_transfer` represen
 power; their time integrals are energy estimates. Generation, absorption, and
 transfer channels remain separate. Individual-pitch results and figures are
 local outputs excluded from Git.
+
+## Swing Phase Decomposition
+
+Study 09 reads hitting `joint_angles.csv`, `joint_velos.csv`, `metadata.csv`, and
+`poi_metrics.csv`. It automatically downloads missing Dataset v1 files and verifies
+the two archive hashes (about 155 MB total). Existing CSVs are reused and hashed in
+the run manifest. No C3D, landmark, force-plate, or HitTrax inputs are needed.
+
+Official events are `fp_10_time`, `fp_100_time`, and `contact_time`. Full-signal
+velocity columns use names such as `pelvis_angular_velocity_z`, rather than the
+pitching table's `pelvis_velo_z`. Marker-derived inputs are sampled at 360 Hz.
+Hitting knee/elbow extension is negative under the processed OBP conventions.
+
+The primary outcome is POI `bat_speed_mph_contact_x`; `blast_bat_speed_mph_x`
+and `exit_velo_mph_x` are modeled separately as secondary outcomes. Joins use
+processed `session_swing` IDs with one-to-one validation. Bat kinematics are not
+predictors. The early/late post-plant boundary is an analytical fraction of
+plant-to-contact time, not an official swing-initiation event. Individual swing
+results and figures are local outputs excluded from Git.
