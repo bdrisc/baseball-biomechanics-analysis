@@ -232,3 +232,6 @@ __pycache__/
 figures/generated/
 figures/head_stability/
 results/head_stability/
+
+results/phase_decomposition/
+figures/phase_decomposition/

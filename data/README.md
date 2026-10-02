@@ -46,7 +46,7 @@ The pelvis–torso separation-timing study uses the hitting joint-angle and meta
 
 The head-stability study additionally uses `hitting_c3d.zip` from Dataset v1, extracted under `data/raw/hitting/c3d/`. It reads four head markers and both wrist-marker pairs with `ezc3d`, and uses `landmarks.csv` for event times and wrist-trajectory validation. The notebook downloads these inputs automatically when absent, verifies official archive hashes, and excludes ambiguous joins. C3D filename swing numbers must not be used directly as processed swing IDs.
 
-The first six studies do not require raw C3Ds. The head-stability study does not require joint-angle or joint-velocity tables. None of the seven notebooks requires force-plate archives or media files.
+The first six studies do not require raw C3Ds. The head-stability study does not require joint-angle or joint-velocity tables. None of the eight notebooks requires force-plate archives or media files.
 
 ## Data Relationships
 
@@ -57,3 +57,18 @@ The first six studies do not require raw C3Ds. The head-stability study does not
 ## Data Use
 
 OpenBiomechanics data and biomechanics documentation have their own license and usage restrictions. Review the current [OBP data license](https://github.com/drivelineresearch/openbiomechanics/blob/main/LICENSE-DATA.md) before using or redistributing any data.
+
+## Delivery Phase Decomposition
+
+The phase-decomposition notebook also requires `data/raw/pitching/energy_flow.csv`,
+extracted from the official `pitching_energy_flow.zip` Dataset v1 asset. It reads
+joint angles, angular velocities, energy flow, metadata, and POI metrics, and
+fetches missing files automatically. The three processed archives total about
+115 MB and are verified against published SHA-256 hashes.
+
+Events are `fp_10_time`, `fp_100_time`, `MER_time`, `BR_time`, and `MIR_time`.
+Signal tables are validated independently and integrated on their own time grids.
+Full-signal columns containing `energy_generated` and `energy_transfer` represent
+power; their time integrals are energy estimates. Generation, absorption, and
+transfer channels remain separate. Individual-pitch results and figures are
+local outputs excluded from Git.

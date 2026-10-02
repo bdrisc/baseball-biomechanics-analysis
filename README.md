@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains seven applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation onset, and head movement and repeatability using raw and processed motion-capture and point-of-impact data.
+This repository contains eight applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation onset, head movement and repeatability, and delivery-phase profiles using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -14,8 +14,8 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Posture Loss and Contact-Point Consistency | Is greater post-plant posture loss associated with more variable hand position and HitTrax point-of-impact depth at contact? | Hitting landmarks, POI metrics, and HitTrax data | [View notebook](notebooks/hitting/04_posture_contact_consistency.ipynb) |
 | Uprighting Velocity and Rotational Timing | How quickly do hitters change torso and pelvis posture after foot plant, and when do those peaks occur relative to axial rotation? | Hitting joint angles, joint angular velocities, POI metrics, and metadata | [View notebook](notebooks/hitting/05_uprighting_velocity.ipynb) |
 | Pelvis–Torso Separation Timing | How long does the pelvis rotate before the torso begins sustained rotation toward the mound? | Hitting joint angles and metadata | [View notebook](notebooks/hitting/06_pelvis_torso_separation_timing.ipynb) |
-
 | Head Movement, Repeatability & Batted-Ball Outcomes | Are within-session head movement and across-swing head repeatability associated with bat speed, exit velocity, and contact-depth variability? | Hitting C3D head/wrist markers, landmarks, metadata, POI, and HitTrax | [View notebook](notebooks/hitting/07_head_stability_contact_quality.ipynb) |
+| Delivery Phase Profiles & Pitch Velocity | Which pre-release phases add held-out predictive information about fastball velocity, and how do selected joint energy estimates vary by phase? | Pitching angles, angular velocities, energy flow, metadata, and POI | [View notebook](notebooks/pitching/08_pitching_phase_decomposition.ipynb) |
 
 ## Key Findings
 
@@ -75,6 +75,17 @@ The purpose of the project is to turn biomechanical time-series data into interp
 
 The [study guide](docs/head_stability.md) explains setup, metric definitions, quality checks, model interpretation, and generated outputs.
 
+### 8. Delivery Phase Profiles & Pitch Velocity
+
+- Segments landing (foot contact to foot plant), cocking (foot plant to maximum external rotation), acceleration (maximum external rotation to release), and descriptive early follow-through (release to maximum internal rotation). Only pre-release features enter velocity models.
+- A full Dataset v1 run retained 402 of 411 fastballs from 100 pitchers. Nine pitches had missing or unordered pre-release events. A separate sensitivity excludes five pitches with unusually long phase annotations, retaining 397 pitches from the same 100 pitchers.
+- Repeated nested validation holds out whole pitchers: five outer folds, four inner folds, two seeded repeats. Scaling and ridge penalty selection use training data only. Prediction errors weight pitchers equally.
+- The all-phase kinematic model had held-out MAE of 2.97 mph, compared with 3.69 mph for the body-size baseline. Adding selected joint energy-flow features reduced MAE to 2.28 mph on the same 402-pitch cohort. The paired pitcher-bootstrap improvement was 0.69 mph (95% interval 0.31–1.06).
+- Removing acceleration kinematics increased MAE by 0.30 mph in the full sample, while removing cocking increased it by 0.23 mph. In the long-phase sensitivity, cocking had the larger point estimate. This does not establish a stable single phase winner or a causal contribution to ball speed.
+- Power signals are integrated over real seconds to estimate mass-normalized generation, absorption, and separate signed transfer channels at the lead knee, shoulder, and elbow. Estimates are cross-checked against official POI summaries; sampling/definition differences are reported rather than assumed away. No whole-body energy total or percentage of velocity is calculated.
+
+See the [phase study guide](docs/phase_decomposition.md) for definitions, validation limits, setup, and output descriptions.
+
 ## Repository Structure
 
 ```text
@@ -82,7 +93,8 @@ baseball-biomechanics-analysis/
 ├── notebooks/
 │   ├── pitching/
 │   │   ├── 01_kinematic_sequencing.ipynb
-│   │   └── 02_trunk_stability_release.ipynb
+│   │   ├── 02_trunk_stability_release.ipynb
+│   │   └── 08_pitching_phase_decomposition.ipynb
 │   └── hitting/
 │       ├── 03_hinge_integrity.ipynb
 │       ├── 04_posture_contact_consistency.ipynb
@@ -116,6 +128,8 @@ jupyter lab
 Download the required OpenBiomechanics files separately and place them under `data/raw/pitching/` and `data/raw/hitting/`. Exact filenames and locations are documented in [data/README.md](data/README.md). Raw data are intentionally excluded from this repository.
 
 Run the notebooks in numerical order. The notebooks contain reproducible workflows. The revised sequencing notebook was run against the official Dataset v1 pitching files for the findings above, but its saved outputs are cleared to avoid stale results when users run it on their own local files. Raw data are not committed; the hitting notebooks download missing official Dataset v1 inputs when run locally. The head-stability notebook requires `ezc3d` and `statsmodels` (included in requirements), downloads roughly 498 MB of C3D and landmark archives on its first run, and reuses local inputs thereafter. Its saved outputs are cleared; running all cells creates the plots and CSV summaries. It also works as a standalone notebook, using the current working directory when the repository is absent.
+
+The phase-decomposition notebook requires `scikit-learn` (included in requirements). It automatically downloads roughly 115 MB of missing processed pitching archives, reuses local files, and runs independently of the earlier notebooks. Saved notebook outputs are cleared.
 
 ## Methods and Interpretation
 
