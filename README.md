@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains nine applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation onset, head movement and repeatability, delivery-phase profiles, and swing-phase profiles using raw and processed motion-capture and point-of-impact data.
+This repository contains ten applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation onset, head movement and repeatability, delivery-phase profiles, and swing-phase profiles using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -16,6 +16,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Pelvis–Torso Separation Timing | How long does the pelvis rotate before the torso begins sustained rotation toward the mound? | Hitting joint angles and metadata | [View notebook](notebooks/hitting/06_pelvis_torso_separation_timing.ipynb) |
 | Head Movement, Repeatability & Batted-Ball Outcomes | Are within-session head movement and across-swing head repeatability associated with bat speed, exit velocity, and contact-depth variability? | Hitting C3D head/wrist markers, landmarks, metadata, POI, and HitTrax | [View notebook](notebooks/hitting/07_head_stability_contact_quality.ipynb) |
 | Delivery Phase Profiles & Pitch Velocity | Which pre-release phases add held-out predictive information about fastball velocity, and how do selected joint energy estimates vary by phase? | Pitching angles, angular velocities, energy flow, metadata, and POI | [View notebook](notebooks/pitching/08_pitching_phase_decomposition.ipynb) |
+| Pre-Landing Pelvis and Torso Bend Loss | How much posture change occurs before landing, and when does it begin relative to axial rotation? | Hitting joint angles, velocities, landmarks, metadata and POI | [View notebook](notebooks/hitting/11_stride_bend_loss.ipynb) |
 | Swing Phase Profiles & Bat Speed | Which pre-contact windows add predictive information about bat speed, and how sensitive are results to phase definitions? | Hitting joint angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/09_hitting_phase_decomposition.ipynb) |
 
 ## Key Findings
@@ -147,6 +148,14 @@ The hitter phase notebook also uses `scikit-learn`, downloads roughly 155 MB of 
 
 ## Methods and Interpretation
 
+The pre-landing bend-loss notebook (`11_stride_bend_loss.ipynb`) measures signed
+pelvis/torso change in a fixed 150 ms window before front-foot contact, with
+100/200 ms sensitivities, separate landing changes, censored onset estimates,
+hitter/session summaries, and a synchronized landmark animation. The fixed
+window is not measured toe-off or the full stride. See
+[the methods and setup](docs/stride_bend_loss.md). Outputs are cleared; running
+all cells downloads missing official inputs and generates local results.
+
 The notebooks use event-based filtering, interpolation or temporal normalization, athlete/session aggregation, descriptive statistics, correlation analysis, regression, sensitivity testing, and bootstrap uncertainty estimates. These are observational analyses of the available OBP sample. Their findings identify associations and sample-level tendencies, not causal mechanical prescriptions for individual athletes.
 
 ## Data Source and License
@@ -159,3 +168,4 @@ No OpenBiomechanics raw data are redistributed in this repository.
 
 Brendan Driscoll  
 [GitHub](https://github.com/bdrisc)
+
