@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains ten applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation onset, head movement and repeatability, delivery-phase profiles, and swing-phase profiles using raw and processed motion-capture and point-of-impact data.
+This repository contains eleven applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, and swing-phase profiles using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -18,6 +18,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Delivery Phase Profiles & Pitch Velocity | Which pre-release phases add held-out predictive information about fastball velocity, and how do selected joint energy estimates vary by phase? | Pitching angles, angular velocities, energy flow, metadata, and POI | [View notebook](notebooks/pitching/08_pitching_phase_decomposition.ipynb) |
 | Pre-Landing Pelvis and Torso Bend Loss | How much posture change occurs before landing, and when does it begin relative to axial rotation? | Hitting joint angles, velocities, landmarks, metadata and POI | [View notebook](notebooks/hitting/11_stride_bend_loss.ipynb) |
 | Swing Phase Profiles & Bat Speed | Which pre-contact windows add predictive information about bat speed, and how sensitive are results to phase definitions? | Hitting joint angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/09_hitting_phase_decomposition.ipynb) |
+| Pelvis–Torso Uprighting Offset | Does the pelvis begin uprighting before the torso, and how do first versus final movement episodes affect lag and consistency? | Hitting joint angles, metadata, optional POI and landmarks | [View notebook](notebooks/hitting/12_pelvis_torso_uprighting_offset.ipynb) |
 
 ## Key Findings
 
@@ -98,6 +99,17 @@ See the [phase study guide](docs/phase_decomposition.md) for definitions, valida
 
 See the [hitting phase study guide](docs/hitting_phase_decomposition.md) for setup, exact definitions, findings, and limitations.
 
+### 12. Pelvis–Torso Uprighting Offset
+
+- Compares first sustained uprighting with the final qualifying positive-rate episode approaching contact. Signed lag is torso onset minus pelvis onset; positive values mean pelvis first.
+- The reviewed Dataset v1 run retained 642 of 677 swings from 97 hitters. The first-onset detector returned 640 pairs and a median swing lag of +2.7 ms. The final-episode detector returned 642 pairs, a median swing lag of 0.0 ms, and a median hitter lag of 0.0 ms (hitter-bootstrap 95% interval -5.6 to +5.5 ms).
+- Final onset order was pelvis first in 42.7% of swings, torso first in 41.9%, and unresolved within one sample interval in 15.4%. The combined duration sensitivity retained 544 swings and also had a median final lag of 0.0 ms.
+- A +716.6 ms first-onset offset reflected an early pelvis movement paired with later torso uprighting. Selecting the final episode yielded +2.7 ms for that trial. This changes the operational measurement rather than establishing a ground-truth onset.
+- Final-episode order was unchanged among comparable detected pairs under 10/30/50 ms contact-gap choices. Relative-threshold and filter choices still changed individual labels: roughly 85–87% agreement for tested relative thresholds and 75% at 8 Hz.
+- Performance associations were generally weak; one restricted within-session bat-speed association was exploratory among multiple comparisons. No universal pelvis-first sequence, ideal lag, or causal performance benefit is established.
+
+See the [uprighting-offset study guide](docs/pelvis_torso_uprighting_offset.md) for definitions, duration audits, findings, setup, and output descriptions.
+
 ## Repository Structure
 
 ```text
@@ -113,7 +125,9 @@ baseball-biomechanics-analysis/
 │       ├── 05_uprighting_velocity.ipynb
 │       ├── 06_pelvis_torso_separation_timing.ipynb
 │       ├── 07_head_stability_contact_quality.ipynb
-│       └── 09_hitting_phase_decomposition.ipynb
+│       ├── 09_hitting_phase_decomposition.ipynb
+│       ├── 11_stride_bend_loss.ipynb
+│       └── 12_pelvis_torso_uprighting_offset.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -146,6 +160,8 @@ The phase-decomposition notebook requires `scikit-learn` (included in requiremen
 
 The hitter phase notebook also uses `scikit-learn`, downloads roughly 155 MB of missing hitting archives, and runs independently. Its code-only notebook has cleared outputs. Running all six cells creates results, profiles, and plots under `results/hitting_phase_decomposition/` and `figures/hitting_phase_decomposition/`.
 
+Study 12 is a standalone, code-only notebook using the existing hitting joint-angle and metadata CSVs, with optional POI outcomes and a synchronized landmark animation. Missing official inputs download automatically and archive checksums are verified. Saved outputs are cleared; Run All generates local CSVs, figures, and HTML under `results/pelvis_torso_uprighting_offset_v3/` and `figures/pelvis_torso_uprighting_offset_v3/`. Its measurement checks run with `python -m unittest discover -s tests -p test_uprighting_offset.py -v`.
+
 ## Methods and Interpretation
 
 The pre-landing bend-loss notebook (`11_stride_bend_loss.ipynb`) measures signed
@@ -168,4 +184,3 @@ No OpenBiomechanics raw data are redistributed in this repository.
 
 Brendan Driscoll  
 [GitHub](https://github.com/bdrisc)
-

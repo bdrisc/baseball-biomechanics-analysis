@@ -91,3 +91,17 @@ processed `session_swing` IDs with one-to-one validation. Bat kinematics are not
 predictors. The early/late post-plant boundary is an analytical fraction of
 plant-to-contact time, not an official swing-initiation event. Individual swing
 results and figures are local outputs excluded from Git.
+
+## Pelvis–Torso Uprighting Offset
+
+Study 12 uses hitting `joint_angles.csv` and `metadata.csv`. Optional outcome analysis
+uses `poi_metrics.csv`; the synchronized joint-center animation uses `landmarks.csv`.
+No velocity archive, C3D, force-plate, or camera-video input is needed. Missing official
+Dataset v1 files download automatically, and angle/landmark archive hashes are checked.
+Set `MAKE_ANIMATION=False` to skip the landmark archive.
+
+Pelvis X is posterior (+)/anterior (-) tilt; torso X is extension (+)/flexion (-).
+The study compares first sustained threshold crossings with the final qualifying
+positive-rate episode ending near contact. CSV sample rows are not video frames.
+Raw data, individual derived tables, and animation HTML remain local and ignored.
+See [the study guide](../docs/pelvis_torso_uprighting_offset.md).
