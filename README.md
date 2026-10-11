@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains eleven applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, and swing-phase profiles using raw and processed motion-capture and point-of-impact data.
+This repository contains twelve applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, and swing-phase profiles using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -19,6 +19,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Pre-Landing Pelvis and Torso Bend Loss | How much posture change occurs before landing, and when does it begin relative to axial rotation? | Hitting joint angles, velocities, landmarks, metadata and POI | [View notebook](notebooks/hitting/11_stride_bend_loss.ipynb) |
 | Swing Phase Profiles & Bat Speed | Which pre-contact windows add predictive information about bat speed, and how sensitive are results to phase definitions? | Hitting joint angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/09_hitting_phase_decomposition.ipynb) |
 | Pelvis–Torso Uprighting Offset | Does the pelvis begin uprighting before the torso, and how do first versus final movement episodes affect lag and consistency? | Hitting joint angles, metadata, optional POI and landmarks | [View notebook](notebooks/hitting/12_pelvis_torso_uprighting_offset.ipynb) |
+| Attack Angle Repeatability | Do higher-level hitters show less contact attack-angle variability, and is the comparison sensitive to individual hitters? | Hitting metadata and official POI attack angles, bat speed, and exit velocity | [View notebook](notebooks/hitting/13_swing_plane_consistency.ipynb) |
 
 ## Key Findings
 
@@ -110,6 +111,16 @@ See the [hitting phase study guide](docs/hitting_phase_decomposition.md) for set
 
 See the [uprighting-offset study guide](docs/pelvis_torso_uprighting_offset.md) for definitions, duration audits, findings, setup, and output descriptions.
 
+### 13. Attack Angle Repeatability
+
+- Measures official contact attack-angle variability within hitter-sessions. It does not measure full 3D bat-path or swing-plane consistency.
+- The reviewed Dataset v1 run retained 661 swings from 94 hitters with at least five valid swings per session. College hitters (71) averaged 4.20 degrees of within-session attack-angle SD; MiLB hitters (7) averaged 2.87 degrees.
+- The MiLB minus college difference was -1.33 degrees, with a conditional hitter-bootstrap 95% interval of -2.19 to -0.29 degrees. The four-swing sensitivity and robust MAD comparison had intervals including zero; the six-swing threshold retained only three MiLB hitters.
+- Omitting each MiLB hitter produced differences from -1.70 to -1.18 degrees; omitting each college hitter produced differences from -1.36 to -1.20 degrees. No omission reversed the difference, and all 78 SD omission intervals remained below zero. These are influence checks, not independent replications.
+- Associations with mean exit velocity, exit-velocity variability, and mean bat speed were weak and did not pass the three-test FDR adjustment. The small MiLB cohort, short sessions, and unmeasured pitch context limit generalization.
+
+See the [repeatability study guide](docs/swing_plane_consistency.md) for setup, measurements, sensitivity checks, and output descriptions.
+
 ## Repository Structure
 
 ```text
@@ -127,7 +138,8 @@ baseball-biomechanics-analysis/
 │       ├── 07_head_stability_contact_quality.ipynb
 │       ├── 09_hitting_phase_decomposition.ipynb
 │       ├── 11_stride_bend_loss.ipynb
-│       └── 12_pelvis_torso_uprighting_offset.ipynb
+│       ├── 12_pelvis_torso_uprighting_offset.ipynb
+│       └── 13_swing_plane_consistency.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -161,6 +173,8 @@ The phase-decomposition notebook requires `scikit-learn` (included in requiremen
 The hitter phase notebook also uses `scikit-learn`, downloads roughly 155 MB of missing hitting archives, and runs independently. Its code-only notebook has cleared outputs. Running all six cells creates results, profiles, and plots under `results/hitting_phase_decomposition/` and `figures/hitting_phase_decomposition/`.
 
 Study 12 is a standalone, code-only notebook using the existing hitting joint-angle and metadata CSVs, with optional POI outcomes and a synchronized landmark animation. Missing official inputs download automatically and archive checksums are verified. Saved outputs are cleared; Run All generates local CSVs, figures, and HTML under `results/pelvis_torso_uprighting_offset_v3/` and `figures/pelvis_torso_uprighting_offset_v3/`. Its measurement checks run with `python -m unittest discover -s tests -p test_uprighting_offset.py -v`.
+
+Study 13 is a standalone, code-only notebook using hitting metadata and POI CSVs. Missing Dataset v1 CSVs download automatically; local inputs are reused and hashed in the run manifest. Saved outputs are cleared. Run All writes CSVs and an interpretation under `results/swing_plane_consistency/`, and six figures under `figures/swing_plane_consistency/`. No C3D or full-signal archives are required.
 
 ## Methods and Interpretation
 

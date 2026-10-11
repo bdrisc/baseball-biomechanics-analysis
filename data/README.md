@@ -105,3 +105,7 @@ The study compares first sustained threshold crossings with the final qualifying
 positive-rate episode ending near contact. CSV sample rows are not video frames.
 Raw data, individual derived tables, and animation HTML remain local and ignored.
 See [the study guide](../docs/pelvis_torso_uprighting_offset.md).
+
+## Attack Angle Repeatability
+
+Study 13 uses only hitting `metadata.csv` and `poi_metrics.csv`, joining on `session_swing`. It reads the official `attack_angle_contact_x`, `bat_speed_mph_contact_x`, and `exit_velo_mph_x` POI fields. No C3D or full-signal archive is required. Missing Dataset v1 CSVs download automatically; existing files are reused and their SHA-256 hashes are recorded. The notebook summarizes variability within sessions, compares playing levels, and runs whole-hitter omission checks. See [the study guide](../docs/swing_plane_consistency.md).
