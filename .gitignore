@@ -241,3 +241,7 @@ figures/hitting_phase_decomposition/
 
 results/pelvis_torso_uprighting_offset*/
 figures/pelvis_torso_uprighting_offset*/
+
+# Stride movement consistency generated outputs
+results/stride_movement_consistency/
+figures/stride_movement_consistency/

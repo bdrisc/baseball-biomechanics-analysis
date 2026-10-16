@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains twelve applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, and swing-phase profiles using raw and processed motion-capture and point-of-impact data.
+This repository contains thirteen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, and stride movement consistency using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -20,6 +20,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Swing Phase Profiles & Bat Speed | Which pre-contact windows add predictive information about bat speed, and how sensitive are results to phase definitions? | Hitting joint angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/09_hitting_phase_decomposition.ipynb) |
 | Pelvis–Torso Uprighting Offset | Does the pelvis begin uprighting before the torso, and how do first versus final movement episodes affect lag and consistency? | Hitting joint angles, metadata, optional POI and landmarks | [View notebook](notebooks/hitting/12_pelvis_torso_uprighting_offset.ipynb) |
 | Attack Angle Repeatability | Do higher-level hitters show less contact attack-angle variability, and is the comparison sensitive to individual hitters? | Hitting metadata and official POI attack angles, bat speed, and exit velocity | [View notebook](notebooks/hitting/13_swing_plane_consistency.ipynb) |
+| Stride Movement Consistency Before Landing | How do pelvis and torso movement amount, direction reversals, and within-session trajectory repeatability differ before foot contact and during landing? | Hitting joint angles, metadata, and optional POI outcomes | [View notebook](notebooks/hitting/14_stride_movement_consistency.ipynb) |
 
 ## Key Findings
 
@@ -121,6 +122,17 @@ See the [uprighting-offset study guide](docs/pelvis_torso_uprighting_offset.md) 
 
 See the [repeatability study guide](docs/swing_plane_consistency.md) for setup, measurements, sensitivity checks, and output descriptions.
 
+### 14. Stride Movement Consistency Before Landing
+
+- Separates within-swing angle variability, net change, excess angular travel, threshold-confirmed direction reversals, and across-swing trajectory repeatability. Greater movement is not automatically less repeatable or mechanically worse.
+- Uses a fixed 150 ms window before front-foot contact, with 100/200 ms sensitivities, and a separate contact-to-full-plant landing phase. Each phase has independent event and signal eligibility. The fixed window is not measured stride onset or the entire stride.
+- The reviewed Dataset v1 run retained 662 approach swings from 98 hitters and 635 landing swings. Ninety-one approach sessions and 86 landing sessions met the five-swing minimum. Hitter-weighted mean start-relative trajectory SD was 0.809 degrees for pelvis and 0.708 degrees for torso in the approach window.
+- An event audit identified 13 approach trials with annotated foot contact after ball contact. A consistent sensitivity omits those trial IDs, recomputes session/outcome profiles, and retains 649 approach swings with 89 eligible sessions. Mean pelvis/torso trajectory SD falls to 0.717/0.572 degrees, while medians change little (0.647/0.500 to 0.645/0.493 degrees). The full sample remains primary; annotations are not repaired.
+- The eight main between-hitter correlations changed by at most 0.022 under the chronology screen. Screened start-relative torso variability had exploratory associations of `rho = -0.230` with mean bat speed and `rho = -0.261` with mean exit velocity. Start-relative pelvis variability was essentially unrelated to either. These are observational, multiple exploratory comparisons.
+- Approach trajectory rankings were stable under additional 8/12/16 Hz filters (rank correlations 0.995–1.000), but more sensitive to window length. Reversal frequency depends on the chosen angular threshold. The study does not establish an ideal movement pattern, a validated smoothness/quality score, or test–retest reliability.
+
+See the [stride movement study guide](docs/stride_movement_consistency.md) for definitions, event audits, influence checks, setup, and outputs.
+
 ## Repository Structure
 
 ```text
@@ -139,7 +151,8 @@ baseball-biomechanics-analysis/
 │       ├── 09_hitting_phase_decomposition.ipynb
 │       ├── 11_stride_bend_loss.ipynb
 │       ├── 12_pelvis_torso_uprighting_offset.ipynb
-│       └── 13_swing_plane_consistency.ipynb
+│       ├── 13_swing_plane_consistency.ipynb
+│       └── 14_stride_movement_consistency.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -175,6 +188,8 @@ The hitter phase notebook also uses `scikit-learn`, downloads roughly 155 MB of 
 Study 12 is a standalone, code-only notebook using the existing hitting joint-angle and metadata CSVs, with optional POI outcomes and a synchronized landmark animation. Missing official inputs download automatically and archive checksums are verified. Saved outputs are cleared; Run All generates local CSVs, figures, and HTML under `results/pelvis_torso_uprighting_offset_v3/` and `figures/pelvis_torso_uprighting_offset_v3/`. Its measurement checks run with `python -m unittest discover -s tests -p test_uprighting_offset.py -v`.
 
 Study 13 is a standalone, code-only notebook using hitting metadata and POI CSVs. Missing Dataset v1 CSVs download automatically; local inputs are reused and hashed in the run manifest. Saved outputs are cleared. Run All writes CSVs and an interpretation under `results/swing_plane_consistency/`, and six figures under `figures/swing_plane_consistency/`. No C3D or full-signal archives are required.
+
+Study 14 is a standalone, code-only notebook using hitting joint angles, metadata, and optional POI outcomes. Missing official inputs download automatically; the angle archive checksum is checked and input hashes are exported. Run All writes measurements, phase exclusions, sensitivity tables, event audits, and interpretations under `results/stride_movement_consistency/`, with plots under `figures/stride_movement_consistency/`. Outputs are cleared. No C3D or landmark archive is required. Numerical measurement and chronology-classification checks run inside the notebook.
 
 ## Methods and Interpretation
 
