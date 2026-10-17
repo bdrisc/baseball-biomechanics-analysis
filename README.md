@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains thirteen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, and stride movement consistency using raw and processed motion-capture and point-of-impact data.
+This repository contains fourteen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, and head/trunk/pelvis release-position repeatability using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -21,6 +21,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Pelvis–Torso Uprighting Offset | Does the pelvis begin uprighting before the torso, and how do first versus final movement episodes affect lag and consistency? | Hitting joint angles, metadata, optional POI and landmarks | [View notebook](notebooks/hitting/12_pelvis_torso_uprighting_offset.ipynb) |
 | Attack Angle Repeatability | Do higher-level hitters show less contact attack-angle variability, and is the comparison sensitive to individual hitters? | Hitting metadata and official POI attack angles, bat speed, and exit velocity | [View notebook](notebooks/hitting/13_swing_plane_consistency.ipynb) |
 | Stride Movement Consistency Before Landing | How do pelvis and torso movement amount, direction reversals, and within-session trajectory repeatability differ before foot contact and during landing? | Hitting joint angles, metadata, and optional POI outcomes | [View notebook](notebooks/hitting/14_stride_movement_consistency.ipynb) |
+| Head & Trunk Stability and Release Consistency | How do head/trunk repeatability and pelvis translation relate to hand-release positional clustering, and does head stability add held-out predictive information? | Pitching C3D head/pelvis markers, joint angles, landmarks, metadata, and POI | [View notebook](notebooks/pitching/15_head_trunk_release_consistency.ipynb) |
 
 ## Key Findings
 
@@ -133,6 +134,17 @@ See the [repeatability study guide](docs/swing_plane_consistency.md) for setup, 
 
 See the [stride movement study guide](docs/stride_movement_consistency.md) for definitions, event audits, influence checks, setup, and outputs.
 
+### 15. Head & Trunk Stability and Release Consistency
+
+- In the executed OpenBiomechanics Dataset v1 run, 408 of 411 fastballs passed head-marker, trunk-angle, and hand-joint-center extraction. The primary four-pitch minimum retained 324 pitches across 68 independent pitcher-sessions; three- and five-pitch sensitivities retained 90 and 52 sessions.
+- The primary outcome is *lateral/vertical dispersion of the throwing-hand joint center at the release event*, not tracked baseball location or target accuracy. Within-session Spearman correlations with this dispersion were `rho = 0.820` for absolute head-position variability and `rho = 0.429` for trunk-angle variability.
+- The focused matched-session diagnostic found `rho = 0.462` for pelvis-relative head variability versus global hand dispersion and `rho = 0.677` when *both* head and hand positions were measured relative to pelvis. Shared whole-body translation contributes to the global correlation, while subtracting the same pelvis position from both measurements also introduces mathematical coupling.
+- Lateral associations were substantially stronger than vertical associations: absolute head vs. absolute hand variability was `rho = 0.865` on the lateral axis versus `rho = 0.253` vertically. These axis-specific results are exploratory.
+- In repeated, pitcher-held-out nested ridge validation, adding absolute head variability to speed/height/pitch-count/pelvis/trunk controls reduced global hand-dispersion MAE from 0.886 to 0.676 cm (paired improvement 0.210 cm, pitcher-bootstrap 95% interval 0.101–0.319). Pelvis-relative head variability improved the same model by only 0.026 cm (interval -0.039 to 0.084). For pelvis-relative hand dispersion, the corresponding relative-head improvement was 0.067 cm (interval -0.013 to 0.136).
+- Leave-one-pitcher-out correlation ranges were 0.812–0.836 (absolute/absolute), 0.438–0.498 (pelvis-relative head/global hand), and 0.663–0.709 (relative/relative). Results describe a small observational assessment sample of 2–5 fastballs per pitcher, not command, causal mechanics, or a player-specific coaching rule.
+
+See the [head/trunk release consistency study guide](docs/head_trunk_release_consistency.md) for source files, matching and eligibility criteria, metric definitions, diagnostics, validation, and interpretation.
+
 ## Repository Structure
 
 ```text
@@ -141,7 +153,8 @@ baseball-biomechanics-analysis/
 │   ├── pitching/
 │   │   ├── 01_kinematic_sequencing.ipynb
 │   │   ├── 02_trunk_stability_release.ipynb
-│   │   └── 08_pitching_phase_decomposition.ipynb
+│   │   ├── 08_pitching_phase_decomposition.ipynb
+│   │   └── 15_head_trunk_release_consistency.ipynb
 │   └── hitting/
 │       ├── 03_hinge_integrity.ipynb
 │       ├── 04_posture_contact_consistency.ipynb
@@ -190,6 +203,8 @@ Study 12 is a standalone, code-only notebook using the existing hitting joint-an
 Study 13 is a standalone, code-only notebook using hitting metadata and POI CSVs. Missing Dataset v1 CSVs download automatically; local inputs are reused and hashed in the run manifest. Saved outputs are cleared. Run All writes CSVs and an interpretation under `results/swing_plane_consistency/`, and six figures under `figures/swing_plane_consistency/`. No C3D or full-signal archives are required.
 
 Study 14 is a standalone, code-only notebook using hitting joint angles, metadata, and optional POI outcomes. Missing official inputs download automatically; the angle archive checksum is checked and input hashes are exported. Run All writes measurements, phase exclusions, sensitivity tables, event audits, and interpretations under `results/stride_movement_consistency/`, with plots under `figures/stride_movement_consistency/`. Outputs are cleared. No C3D or landmark archive is required. Numerical measurement and chronology-classification checks run inside the notebook.
+
+Study 15 is a standalone, code-only pitching study requiring C3D head/pelvis markers, processed joint angles, landmarks, metadata, and POI metrics. The notebook downloads missing Dataset v1 inputs and verifies archive SHA-256 hashes. Its saved outputs are cleared; Run All writes extraction audits, session summaries, correlations, grouped model diagnostics, influence tests, and manifests under `results/head_trunk_release_consistency/`, and charts under `figures/head_trunk_release_consistency/`. The downloaded raw C3Ds may be large. See [the study guide](docs/head_trunk_release_consistency.md).
 
 ## Methods and Interpretation
 
