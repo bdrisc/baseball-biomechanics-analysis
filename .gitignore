@@ -245,3 +245,7 @@ figures/pelvis_torso_uprighting_offset*/
 # Stride movement consistency generated outputs
 results/stride_movement_consistency/
 figures/stride_movement_consistency/
+
+# Pitching head/trunk release consistency generated outputs
+results/head_trunk_release_consistency/
+figures/head_trunk_release_consistency/
