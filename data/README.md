@@ -46,7 +46,7 @@ The pelvis–torso separation-timing study uses the hitting joint-angle and meta
 
 The head-stability study additionally uses `hitting_c3d.zip` from Dataset v1, extracted under `data/raw/hitting/c3d/`. It reads four head markers and both wrist-marker pairs with `ezc3d`, and uses `landmarks.csv` for event times and wrist-trajectory validation. The notebook downloads these inputs automatically when absent, verifies official archive hashes, and excludes ambiguous joins. C3D filename swing numbers must not be used directly as processed swing IDs.
 
-The first six studies do not require raw C3Ds. The head-stability study does not require joint-angle or joint-velocity tables. None of the nine notebooks requires force-plate archives or media files.
+The first six studies do not require raw C3Ds. Hitting study 07 and pitching study 15 require the appropriate discipline-specific C3D archives. Study 07 does not require joint-angle or joint-velocity tables. None of the studies requires force-plate archives or media files.
 
 ## Data Relationships
 
@@ -109,3 +109,13 @@ See [the study guide](../docs/pelvis_torso_uprighting_offset.md).
 ## Attack Angle Repeatability
 
 Study 13 uses only hitting `metadata.csv` and `poi_metrics.csv`, joining on `session_swing`. It reads the official `attack_angle_contact_x`, `bat_speed_mph_contact_x`, and `exit_velo_mph_x` POI fields. No C3D or full-signal archive is required. Missing Dataset v1 CSVs download automatically; existing files are reused and their SHA-256 hashes are recorded. The notebook summarizes variability within sessions, compares playing levels, and runs whole-hitter omission checks. See [the study guide](../docs/swing_plane_consistency.md).
+
+## Head & Trunk Stability and Release Consistency (Study 15)
+
+Study 15 reads pitching `metadata.csv`, `poi_metrics.csv`, `joint_angles.csv`, and `landmarks.csv`, plus the `pitching_c3d.zip` Dataset v1 asset. It can download missing official inputs automatically (set `AUTO_DOWNLOAD=False` for local-only runs), verifies the official archive SHA-256 digests, and extracts C3D files under `data/raw/pitching/c3d/`. C3D downloads can be large. Raw files are not committed.
+
+Each C3D is joined through the **exact** `metadata.filename_new` field and checked against the processed trial's time grid; C3D filename pitch numbers must not be interpreted as the processed `session_pitch` suffix. The analysis uses `BR_time` to interpolate release values and align the final 100 ms of movement. Head translation is the four-marker `LFHD/RFHD/LBHD/RBHD` centroid. The pelvis reference is the `LASI/RASI/LPSI/RPSI` marker centroid, not an anatomical pelvis center. Trunk angles use `torso_angle_x/y/z` from processed joint angles.
+
+The primary outcome is sample-SD-based RMS dispersion of **hand joint-center** positions in global lateral/vertical coordinates (Y/Z), *not tracked baseball release location or command*. The diagnostic examines both global and pelvis-relative head/hand positions, lateral and vertical components separately, fixed cohort comparisons, pitcher-held-out prediction, and leave-one-pitcher-out influence. Subtracting the same pelvis reference from head and hand can introduce mathematical coupling. Minimum complete trial count is four pitches per session, with three- and five-pitch sensitivity checks.
+
+Run the notebook at `notebooks/pitching/15_head_trunk_release_consistency.ipynb`. Generated CSVs, run manifests, and audit files go to `results/head_trunk_release_consistency/`, with figures under `figures/head_trunk_release_consistency/`; both are ignored by Git. See [the study guide](../docs/head_trunk_release_consistency.md) for reproducibility and interpretation.
