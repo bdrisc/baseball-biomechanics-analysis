@@ -249,3 +249,7 @@ figures/stride_movement_consistency/
 # Pitching head/trunk release consistency generated outputs
 results/head_trunk_release_consistency/
 figures/head_trunk_release_consistency/
+
+# Individual swing consistency generated outputs
+results/individual_swing_fingerprints/
+figures/individual_swing_fingerprints/

@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains fourteen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, and head/trunk/pelvis release-position repeatability using raw and processed motion-capture and point-of-impact data.
+This repository contains fifteen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, and individual swing consistency profiles using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -22,6 +22,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Attack Angle Repeatability | Do higher-level hitters show less contact attack-angle variability, and is the comparison sensitive to individual hitters? | Hitting metadata and official POI attack angles, bat speed, and exit velocity | [View notebook](notebooks/hitting/13_swing_plane_consistency.ipynb) |
 | Stride Movement Consistency Before Landing | How do pelvis and torso movement amount, direction reversals, and within-session trajectory repeatability differ before foot contact and during landing? | Hitting joint angles, metadata, and optional POI outcomes | [View notebook](notebooks/hitting/14_stride_movement_consistency.ipynb) |
 | Head & Trunk Stability and Release Consistency | How do head/trunk repeatability and pelvis translation relate to hand-release positional clustering, and does head stability add held-out predictive information? | Pitching C3D head/pelvis markers, joint angles, landmarks, metadata, and POI | [View notebook](notebooks/pitching/15_head_trunk_release_consistency.ipynb) |
+| Individual Swing Consistency Profiles | How repeatable are a hitter’s pelvis and torso angle trajectories across reps, and how sensitive are profiles to phase duration? | Hitting joint angles, metadata, and optional POI context | [View notebook](notebooks/hitting/16_individual_swing_fingerprints.ipynb) |
 
 ## Key Findings
 
@@ -145,6 +146,16 @@ See the [stride movement study guide](docs/stride_movement_consistency.md) for d
 
 See the [head/trunk release consistency study guide](docs/head_trunk_release_consistency.md) for source files, matching and eligibility criteria, metric definitions, diagnostics, validation, and interpretation.
 
+### 16. Individual Swing Consistency Profiles
+
+- The executed Dataset v1 run retained 627 of 677 available swings and produced 85 hitter-session-side profiles at a five-swing minimum. Pelvis/torso tilt and axial rotation are overlaid across approach, landing, and post-plant phases, with absolute and phase-start-relative views.
+- Mean ±1 sample-SD bands, pointwise spread, RMS trajectory SD, phase durations, leave-one-out swing distances, and omission diagnostics describe individual patterns without a combined quality grade. The HTML report supports session selection and swing highlighting.
+- A pooled Q3 + 3×IQR duration audit flagged 74 landing intervals above 158.5 ms and no post-plant intervals. The primary sample is preserved; omitting flagged swings leaves 553 swings and 73 eligible profiles. Landing caps of 200/300/400 ms leave 573/596/612 swings and 75/80/84 profiles. These are sensitivity settings, not physiological validity limits.
+- Some profiles are sensitive to individual reps: absolute pelvis-rotation trajectory SD during landing falls by 10.067 degrees for hitter `000130` under the statistical or 200 ms screen. Lost session eligibility is reported separately from matched-profile changes. The focused session `000009` / `000123` exceeds every tested landing cap and is reviewed in real time without repairing annotations.
+- Minimums of four/five/six swings yield 92/85/62 profiles. The study describes within-session repeatability, not causal performance benefits, longitudinal reliability, or validated iPhone measurements.
+
+See the [individual consistency study guide](docs/individual_swing_fingerprints.md) for definitions, eligibility, audit design, reviewed findings, and outputs.
+
 ## Repository Structure
 
 ```text
@@ -165,7 +176,8 @@ baseball-biomechanics-analysis/
 │       ├── 11_stride_bend_loss.ipynb
 │       ├── 12_pelvis_torso_uprighting_offset.ipynb
 │       ├── 13_swing_plane_consistency.ipynb
-│       └── 14_stride_movement_consistency.ipynb
+│       ├── 14_stride_movement_consistency.ipynb
+│       └── 16_individual_swing_fingerprints.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -205,6 +217,8 @@ Study 13 is a standalone, code-only notebook using hitting metadata and POI CSVs
 Study 14 is a standalone, code-only notebook using hitting joint angles, metadata, and optional POI outcomes. Missing official inputs download automatically; the angle archive checksum is checked and input hashes are exported. Run All writes measurements, phase exclusions, sensitivity tables, event audits, and interpretations under `results/stride_movement_consistency/`, with plots under `figures/stride_movement_consistency/`. Outputs are cleared. No C3D or landmark archive is required. Numerical measurement and chronology-classification checks run inside the notebook.
 
 Study 15 is a standalone, code-only pitching study requiring C3D head/pelvis markers, processed joint angles, landmarks, metadata, and POI metrics. The notebook downloads missing Dataset v1 inputs and verifies archive SHA-256 hashes. Its saved outputs are cleared; Run All writes extraction audits, session summaries, correlations, grouped model diagnostics, influence tests, and manifests under `results/head_trunk_release_consistency/`, and charts under `figures/head_trunk_release_consistency/`. The downloaded raw C3Ds may be large. See [the study guide](docs/head_trunk_release_consistency.md).
+
+Study 16 is a standalone, code-only hitting notebook with no Python comments and cleared outputs. It uses joint angles, metadata, and optional POI context, downloads missing official inputs, verifies the angle archive, and records input hashes. Run All creates CSV profiles, duration audits, sensitivity comparisons, selected-session plots, and an interactive HTML report under `results/individual_swing_fingerprints/` and `figures/individual_swing_fingerprints/`. Optional notebook widgets are supported; the standalone HTML report needs no additional package. See the [study guide](docs/individual_swing_fingerprints.md).
 
 ## Methods and Interpretation
 
