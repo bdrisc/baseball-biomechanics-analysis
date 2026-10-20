@@ -85,6 +85,8 @@ These results do not establish that every hitter moves down through contact, tha
 
 ## Outputs
 
+The notebook displays matched counts, signed changes, absolute differences, and rank correlations for all six metrics, separately for plant-to-contact and final-100-ms windows. The six-panel sensitivity figure highlights changes in drop, arc length, and approach angle. Set `SENSITIVITY_FRAME` to `global` or `pelvis_relative` to choose the displayed frame. Positive changes mean alternative minus primary reference; time-window changes also reflect how much of the swing is observed.
+
 Under `results/lead_hand_path_shape/`:
 
 - `swing_measurements.csv`: every retained configuration/window/frame measurement and optional POI context.
@@ -92,13 +94,14 @@ Under `results/lead_hand_path_shape/`:
 - `session_profiles.csv`: profile counts, metric means/SDs, and primary trajectory spread.
 - `hitter_weighted_summary.csv`: equal-hitter means and conditional bootstrap intervals.
 - `matched_sensitivity.csv`: paired filter/window/landmark comparisons.
+- `visible_sensitivity_summary.csv` and `sensitivity_<window>_<statistic>_<frame>.csv`: the currently displayed frame and pivoted comparison tables.
 - `minimum_swing_sensitivity.csv`: four/five/six-swing profile counts and spread summaries.
 - `duration_review.csv`, `duration_screened_profiles.csv`: primary duration flags and separately recomputed screened profiles.
 - `exploratory_outcome_associations.csv`: between-hitter associations and adjusted p-values.
 - `lead_hand_profiles.html`: self-contained profile selector with frame switching, swing highlighting, overhead paths, depth-height overlays, color-coded timing, and height bands. Opens offline with no external scripts.
 - `run_manifest.json`: input hashes and processing provenance.
 
-Under `figures/lead_hand_path_shape/`: `selected_hitter_profile.png` and `hitter_distributions.png`. Generated figures, reports, per-swing data, and raw source data remain local and are ignored by Git.
+Under `figures/lead_hand_path_shape/`: `selected_hitter_profile.png`, `hitter_distributions.png`, and `sensitivity_comparisons.png`. Generated figures, reports, per-swing data, and raw source data remain local and are ignored by Git.
 
 ## Measurement verification
 
