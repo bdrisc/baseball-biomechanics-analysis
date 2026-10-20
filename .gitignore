@@ -253,3 +253,7 @@ figures/head_trunk_release_consistency/
 # Individual swing consistency generated outputs
 results/individual_swing_fingerprints/
 figures/individual_swing_fingerprints/
+
+# Lead-hand path shape study
+results/lead_hand_path_shape/
+figures/lead_hand_path_shape/

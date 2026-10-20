@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains fifteen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, and individual swing consistency profiles using raw and processed motion-capture and point-of-impact data.
+This repository contains sixteen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, individual swing consistency profiles, and lead-hand path shape through rotation using raw and processed motion-capture and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -23,6 +23,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Stride Movement Consistency Before Landing | How do pelvis and torso movement amount, direction reversals, and within-session trajectory repeatability differ before foot contact and during landing? | Hitting joint angles, metadata, and optional POI outcomes | [View notebook](notebooks/hitting/14_stride_movement_consistency.ipynb) |
 | Head & Trunk Stability and Release Consistency | How do head/trunk repeatability and pelvis translation relate to hand-release positional clustering, and does head stability add held-out predictive information? | Pitching C3D head/pelvis markers, joint angles, landmarks, metadata, and POI | [View notebook](notebooks/pitching/15_head_trunk_release_consistency.ipynb) |
 | Individual Swing Consistency Profiles | How repeatable are a hitter’s pelvis and torso angle trajectories across reps, and how sensitive are profiles to phase duration? | Hitting joint angles, metadata, and optional POI context | [View notebook](notebooks/hitting/16_individual_swing_fingerprints.ipynb) |
+| Lead-Hand Path Shape Through Rotation | How much does the lead wrist descend and travel around the hitter before contact, and how repeatable is its trajectory? | Hitting wrist/hip landmarks, metadata, and optional POI outcomes | [View notebook](notebooks/hitting/17_lead_hand_path_shape.ipynb) |
 
 ## Key Findings
 
@@ -156,6 +157,16 @@ See the [head/trunk release consistency study guide](docs/head_trunk_release_con
 
 See the [individual consistency study guide](docs/individual_swing_fingerprints.md) for definitions, eligibility, audit design, reviewed findings, and outputs.
 
+### 17. Lead-Hand Path Shape Through Rotation
+
+- Operationalizes the supplied “down and around” observation through separate vertical movement, 3D arc length, pelvis-relative horizontal sweep, final-20-ms hand-path direction, curvature, and trajectory repeatability. The lead wrist joint center is a hand-path proxy, not tracked barrel motion or bat attack angle.
+- The reviewed Dataset v1 run retained all 677 swings for the fixed final 100 ms and produced 94 hitter-session-side profiles at a five-swing minimum. Plant-to-contact extraction retained 641 swings and 87 profiles. Fixed contact windows remain eligible independently of foot-event availability.
+- With primary 12 Hz processing, hitter-weighted pelvis-relative final-100-ms means were −1.60 cm net drop (a net rise), 6.52 cm maximum downward excursion, 69.48 cm arc length, and 72.47° signed horizontal sweep. Earlier descent and net movement through contact are distinct measurements.
+- Filter/window choices and landmark selection are explicitly audited. Replacing the wrist with the hand joint center increased net drop by a paired median 7.42 cm and arc length by 10.91 cm. No ideal path or causal performance benefit is established.
+- A standalone HTML report supports hitter/session selection, coordinate-frame switching, swing highlighting, overhead paths, color-coded depth-height trajectories, and height variability bands.
+
+See the [hand-path study guide](docs/lead_hand_path_shape.md) for definitions, reviewed findings, sensitivity checks, setup, and outputs.
+
 ## Repository Structure
 
 ```text
@@ -177,7 +188,8 @@ baseball-biomechanics-analysis/
 │       ├── 12_pelvis_torso_uprighting_offset.ipynb
 │       ├── 13_swing_plane_consistency.ipynb
 │       ├── 14_stride_movement_consistency.ipynb
-│       └── 16_individual_swing_fingerprints.ipynb
+│       ├── 16_individual_swing_fingerprints.ipynb
+│       └── 17_lead_hand_path_shape.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -219,6 +231,8 @@ Study 14 is a standalone, code-only notebook using hitting joint angles, metadat
 Study 15 is a standalone, code-only pitching study requiring C3D head/pelvis markers, processed joint angles, landmarks, metadata, and POI metrics. The notebook downloads missing Dataset v1 inputs and verifies archive SHA-256 hashes. Its saved outputs are cleared; Run All writes extraction audits, session summaries, correlations, grouped model diagnostics, influence tests, and manifests under `results/head_trunk_release_consistency/`, and charts under `figures/head_trunk_release_consistency/`. The downloaded raw C3Ds may be large. See [the study guide](docs/head_trunk_release_consistency.md).
 
 Study 16 is a standalone, code-only hitting notebook with no Python comments and cleared outputs. It uses joint angles, metadata, and optional POI context, downloads missing official inputs, verifies the angle archive, and records input hashes. Run All creates CSV profiles, duration audits, sensitivity comparisons, selected-session plots, and an interactive HTML report under `results/individual_swing_fingerprints/` and `figures/individual_swing_fingerprints/`. Optional notebook widgets are supported; the standalone HTML report needs no additional package. See the [study guide](docs/individual_swing_fingerprints.md).
+
+Study 17 is a standalone, code-only hitting notebook with no Python comments and cleared outputs. It uses wrist/hip landmarks and metadata, with optional POI context. Missing Dataset v1 inputs download automatically; the roughly 66 MB landmark archive is verified before extraction and input CSV hashes are recorded. Run All creates measurements, profiles, filter/window/landmark sensitivities, duration and eligibility audits, figures, and a self-contained HTML profile report under `results/lead_hand_path_shape/` and `figures/lead_hand_path_shape/`. See the [study guide](docs/lead_hand_path_shape.md). Measurement checks run with `python -m unittest discover -s tests -p test_lead_hand_path_shape.py -v`.
 
 ## Methods and Interpretation
 
