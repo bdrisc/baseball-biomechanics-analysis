@@ -2,7 +2,7 @@
 
 ## Run
 
-Open `notebooks/hitting/18_lower_body_force_proxies.ipynb` after installing the repository requirements and run all 16 cells in order. The notebook is code-only, contains no Python comments, and has cleared outputs. It runs independently of the earlier studies and can use the current directory outside the repository.
+Open `notebooks/hitting/18_lower_body_force_proxies.ipynb` after installing the repository requirements and run all 16 cells in order. The notebook is code-only and contains no Python comments. Outputs from the completed run are saved for GitHub viewing, including charts, tables, and the closing report. It runs independently of the earlier studies and can use the current directory outside the repository.
 
 Missing official OpenBiomechanics Dataset v1 inputs download automatically: hitting joint angles, landmarks, force plates, metadata, and POI metrics. The three signal archives total about 168 MB; extracted CSVs need additional space. Archive SHA-256 values are verified, and reused input hashes are recorded. Set `AUTO_DOWNLOAD=False` for local-only inputs. No C3D or video files are needed.
 
