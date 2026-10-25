@@ -19,7 +19,8 @@ data/
         ├── joint_angles.csv
         ├── joint_velos.csv
         ├── poi_metrics.csv
-        └── hittrax.csv
+        ├── hittrax.csv
+        └── force_plate.csv
 ```
 
 | Local file | Official source |
@@ -35,6 +36,7 @@ data/
 | `data/raw/hitting/joint_velos.csv` | Extract `hitting_joint_velos.zip` from Dataset v1 |
 | `data/raw/hitting/poi_metrics.csv` | `baseball_hitting/data/poi/poi_metrics.csv` |
 | `data/raw/hitting/hittrax.csv` | `baseball_hitting/data/poi/hittrax.csv` |
+| `data/raw/hitting/force_plate.csv` | Extract `hitting_force_plate.zip` from Dataset v1 |
 
 The pitching and hitting files named `metadata.csv` and `landmarks.csv` are different datasets. Keep each file in its corresponding discipline folder.
 
@@ -46,7 +48,7 @@ The pelvis–torso separation-timing study uses the hitting joint-angle and meta
 
 The head-stability study additionally uses `hitting_c3d.zip` from Dataset v1, extracted under `data/raw/hitting/c3d/`. It reads four head markers and both wrist-marker pairs with `ezc3d`, and uses `landmarks.csv` for event times and wrist-trajectory validation. The notebook downloads these inputs automatically when absent, verifies official archive hashes, and excludes ambiguous joins. C3D filename swing numbers must not be used directly as processed swing IDs.
 
-The first six studies do not require raw C3Ds. Hitting study 07 and pitching study 15 require the appropriate discipline-specific C3D archives. Study 07 does not require joint-angle or joint-velocity tables. None of the studies requires force-plate archives or media files.
+The first six studies do not require raw C3Ds. Hitting study 07 and pitching study 15 require the appropriate discipline-specific C3D archives. Study 07 does not require joint-angle or joint-velocity tables. Study 18 additionally requires the hitting force-plate archive. No study requires media files.
 
 ## Data Relationships
 
@@ -133,3 +135,13 @@ Study 17 uses hitting `landmarks.csv` and `metadata.csv`, with optional `poi_met
 Primary windows are ordered foot plant to contact and the independent fixed final 100 ms. Missing or disordered foot events do not invalidate a fixed contact window. Missing official inputs download automatically; the roughly 66 MB `hitting_landmarks.zip` is SHA-256 checked before extraction. No C3D or angle/velocity archive is required. Additional filtering uses precontact signals with reflection at contact; no later follow-through is used beyond possible endpoint interpolation between bracketing samples. Input hashes and settings are recorded.
 
 Run All writes per-swing measurements, eligibility and duration audits, session profiles, matched filter/window/landmark sensitivities, an HTML profile selector, and figures under the ignored `results/lead_hand_path_shape/` and `figures/lead_hand_path_shape/` directories. See [the study guide](../docs/lead_hand_path_shape.md). The wrist/hand-center proxy must not be interpreted as barrel trajectory or bat attack angle.
+
+## Lower-Body Force Proxies (Study 18)
+
+Study 18 reads hitting `joint_angles.csv`, `landmarks.csv`, `force_plate.csv`, `metadata.csv`, and `poi_metrics.csv`. Missing official Dataset v1 inputs download automatically; the three signal archives total about 168 MB and are checked against published SHA-256 hashes. No C3D, velocity archive, HitTrax, or video input is needed.
+
+The landmark table supplies the published `centerofmass_x/y/z` model trajectory. This is distinct from the hip midpoint used as a pelvis-translation proxy. Positions are metres, joint angles degrees, and force channels newtons. Vertical force is normalized to metadata bodyweight; braking impulse integrates the positive braking component of lead-force X over actual seconds. All main targets use contact minus 150 ms through contact minus 10 ms.
+
+Force-plate data are sampled at 1,080 Hz and marker-derived signals at 360 Hz. Each table is checked and measured on its own time grid; a naive exact-time inner join is not used. Force-derived `fp_10_time` and `fp_100_time` annotations enter only the assisted benchmark and audit, not primary predictors. Diagnostic post-contact force/ankle traces are never predictive inputs.
+
+Run All produces the consolidated `study_summary.html`, numerical comparisons, eligibility and force audits, held-out predictions, tuning/fold records, profiles, sensitivities, and a run manifest under `results/lower_body_force_proxies_v3/`, with figures under `figures/lower_body_force_proxies_v3/`. These remain local outputs. See [the study guide](../docs/lower_body_force_proxies.md).

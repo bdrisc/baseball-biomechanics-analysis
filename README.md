@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains sixteen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, individual swing consistency profiles, and lead-hand path shape through rotation using raw and processed motion-capture and point-of-impact data.
+This repository contains seventeen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, individual swing consistency profiles, lead-hand path shape through rotation, and lower-body movement strategies and ground reaction force estimation using raw and processed motion-capture, force-plate, and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -24,6 +24,8 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Head & Trunk Stability and Release Consistency | How do head/trunk repeatability and pelvis translation relate to hand-release positional clustering, and does head stability add held-out predictive information? | Pitching C3D head/pelvis markers, joint angles, landmarks, metadata, and POI | [View notebook](notebooks/pitching/15_head_trunk_release_consistency.ipynb) |
 | Individual Swing Consistency Profiles | How repeatable are a hitter’s pelvis and torso angle trajectories across reps, and how sensitive are profiles to phase duration? | Hitting joint angles, metadata, and optional POI context | [View notebook](notebooks/hitting/16_individual_swing_fingerprints.ipynb) |
 | Lead-Hand Path Shape Through Rotation | How much does the lead wrist descend and travel around the hitter before contact, and how repeatable is its trajectory? | Hitting wrist/hip landmarks, metadata, and optional POI outcomes | [View notebook](notebooks/hitting/17_lead_hand_path_shape.ipynb) |
+
+| Lower-Body Movement Strategies & Ground Reaction Force Estimation | Do lower-body kinematics add predictive information beyond modeled COM movement for selected pre-contact force measures in unseen hitters? | Hitting joint angles, modeled COM and other landmarks, force plates, metadata, and POI context | [View notebook](notebooks/hitting/18_lower_body_force_proxies.ipynb) |
 
 ## Key Findings
 
@@ -167,6 +169,17 @@ See the [individual consistency study guide](docs/individual_swing_fingerprints.
 
 See the [hand-path study guide](docs/lead_hand_path_shape.md) for definitions, reviewed findings, sensitivity checks, setup, and outputs.
 
+### 18. Lower-Body Movement Strategies & Ground Reaction Force Estimation
+
+- The executed Dataset v1 run retained 645 swings from 96 hitters. Force targets cover contact minus 150 ms through contact minus 10 ms, with motion and force signals measured on their own sampling grids.
+- Repeated nested validation holds out entire hitters, fits scaling/tuning inside training folds, and weights hitters equally. Primary features do not use force-derived landing timestamps; an assisted benchmark and measurement audit are separate.
+- For total vertical-force peak, training-calibrated COM physics had held-out MAE of 0.1643 bodyweights (BW), versus 0.1774 BW for the full lower-body + COM model. The full model's paired MAE improvement was -0.0132 BW (conditional hitter-bootstrap 95% interval -0.0264 to +0.0006), so added value beyond the simpler benchmark is not established.
+- For lead vertical-force peak, COM-only and full-model MAEs were 0.1704 and 0.1630 BW; the paired improvement interval included zero. For lead braking impulse, COM-only performed better: 0.01052 versus 0.01211 BW·s. Adding lower-body features has not demonstrated a consistent predictive benefit beyond COM features in these models.
+- The retained-trial audit flagged two near-zero lead-force windows and 19 landing/plant chronology concerns. Their union contains 20 swings. Separate omission sensitivities preserve the primary results and do not repair annotations; refitting did not clearly improve predictions on identical surviving trials.
+- Eighty-six hitter profiles formed two overlapping descriptive clusters (silhouette 0.187; median swing-resampling ARI 0.821). Peak-force timing remained weak. These findings do not establish ideal mechanics, causal coaching prescriptions, full force waveforms, or validity for phone video.
+
+See the [force-proxy study guide](docs/lower_body_force_proxies.md) for model comparisons, measurement definitions, validation limits, setup, and generated outputs.
+
 ## Repository Structure
 
 ```text
@@ -189,7 +202,8 @@ baseball-biomechanics-analysis/
 │       ├── 13_swing_plane_consistency.ipynb
 │       ├── 14_stride_movement_consistency.ipynb
 │       ├── 16_individual_swing_fingerprints.ipynb
-│       └── 17_lead_hand_path_shape.ipynb
+│       ├── 17_lead_hand_path_shape.ipynb
+│       └── 18_lower_body_force_proxies.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -233,6 +247,8 @@ Study 15 is a standalone, code-only pitching study requiring C3D head/pelvis mar
 Study 16 is a standalone, code-only hitting notebook with no Python comments and cleared outputs. It uses joint angles, metadata, and optional POI context, downloads missing official inputs, verifies the angle archive, and records input hashes. Run All creates CSV profiles, duration audits, sensitivity comparisons, selected-session plots, and an interactive HTML report under `results/individual_swing_fingerprints/` and `figures/individual_swing_fingerprints/`. Optional notebook widgets are supported; the standalone HTML report needs no additional package. See the [study guide](docs/individual_swing_fingerprints.md).
 
 Study 17 is a standalone, code-only hitting notebook with no Python comments and cleared outputs. It uses wrist/hip landmarks and metadata, with optional POI context. Missing Dataset v1 inputs download automatically; the roughly 66 MB landmark archive is verified before extraction and input CSV hashes are recorded. Run All creates measurements, profiles, filter/window/landmark sensitivities, duration and eligibility audits, figures, and a self-contained HTML profile report under `results/lead_hand_path_shape/` and `figures/lead_hand_path_shape/`. See the [study guide](docs/lead_hand_path_shape.md). Measurement checks run with `python -m unittest discover -s tests -p test_lead_hand_path_shape.py -v`.
+
+Study 18 is a standalone, code-only hitting notebook with no Python comments and cleared outputs. It automatically downloads missing Dataset v1 joint-angle, landmark, and force-plate archives (about 168 MB total), metadata, and POI files. Archive checksums and local input hashes are recorded. Run All generates grouped model comparisons, force-signal audits, omission sensitivities, movement profiles, figures, and a consolidated HTML summary under `results/lower_body_force_proxies_v3/` and `figures/lower_body_force_proxies_v3/`. Numerical and fold checks run inside the notebook. See [the study guide](docs/lower_body_force_proxies.md).
 
 ## Methods and Interpretation
 
