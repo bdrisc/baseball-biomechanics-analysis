@@ -257,3 +257,7 @@ figures/individual_swing_fingerprints/
 # Lead-hand path shape study
 results/lead_hand_path_shape/
 figures/lead_hand_path_shape/
+
+# Separation and bat speed study
+results/separation_bat_speed/
+figures/separation_bat_speed/

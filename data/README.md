@@ -145,3 +145,21 @@ The landmark table supplies the published `centerofmass_x/y/z` model trajectory.
 Force-plate data are sampled at 1,080 Hz and marker-derived signals at 360 Hz. Each table is checked and measured on its own time grid; a naive exact-time inner join is not used. Force-derived `fp_10_time` and `fp_100_time` annotations enter only the assisted benchmark and audit, not primary predictors. Diagnostic post-contact force/ankle traces are never predictive inputs.
 
 Run All produces the consolidated `study_summary.html`, numerical comparisons, eligibility and force audits, held-out predictions, tuning/fold records, profiles, sensitivities, and a run manifest under `results/lower_body_force_proxies_v3/`, with figures under `figures/lower_body_force_proxies_v3/`. These remain local outputs. See [the study guide](../docs/lower_body_force_proxies.md).
+
+## Separation & Bat Speed (Study 20)
+
+Study 20 uses hitting joint angles, angular velocities, metadata and POI metrics.
+It reuses the Study 09/19 inputs and downloads missing Dataset v1 files with archive
+checksum checks. The primary outcome is published `bat_speed_mph_max_x`; contact
+and Blast speeds are separate secondary outcomes. The exact search window of the
+published maximum is not independently reconstructed. No C3D or landmark archive
+is required.
+
+The primary separation proxy is signed pelvis-minus-torso axial angle; a separate
+sensitivity uses negative `torso_pelvis_angle_z`. Published angular velocities
+supply segment onsets and peak timing. Missing derivative endpoints may be trimmed
+but interior gaps and inconsistent events fail extraction. All joins use unique
+processed `session_swing` IDs. Run All writes audits, grouped validation,
+associations, sensitivities and an HTML summary under
+`results/separation_bat_speed/`, with figures under `figures/separation_bat_speed/`.
+See [the study guide](../docs/separation_bat_speed.md).

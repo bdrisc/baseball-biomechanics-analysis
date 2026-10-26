@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains seventeen applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, individual swing consistency profiles, lead-hand path shape through rotation, and lower-body movement strategies and ground reaction force estimation using raw and processed motion-capture, force-plate, and point-of-impact data.
+This repository contains applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, individual swing consistency profiles, lead-hand path shape through rotation, and lower-body movement strategies and ground reaction force estimation using raw and processed motion-capture, force-plate, and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -26,6 +26,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Lead-Hand Path Shape Through Rotation | How much does the lead wrist descend and travel around the hitter before contact, and how repeatable is its trajectory? | Hitting wrist/hip landmarks, metadata, and optional POI outcomes | [View notebook](notebooks/hitting/17_lead_hand_path_shape.ipynb) |
 
 | Lower-Body Movement Strategies & Ground Reaction Force Estimation | Do lower-body kinematics add predictive information beyond modeled COM movement for selected pre-contact force measures in unseen hitters? | Hitting joint angles, modeled COM and other landmarks, force plates, metadata, and POI context | [View notebook](notebooks/hitting/18_lower_body_force_proxies.ipynb) |
+| Pelvis–Torso Separation & Bat Speed | Do separation magnitude and timing relate to maximum bat speed between hitters, within sessions, and in held-out hitter models? | Hitting angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/20_separation_bat_speed.ipynb) |
 
 ## Key Findings
 
@@ -180,6 +181,15 @@ See the [hand-path study guide](docs/lead_hand_path_shape.md) for definitions, r
 
 See the [force-proxy study guide](docs/lower_body_force_proxies.md) for model comparisons, measurement definitions, validation limits, setup, and generated outputs.
 
+### 20. Pelvis–Torso Separation Magnitude, Timing & Bat Speed
+
+- Extends Study 06's onset measurements and Study 09's phase models with focused magnitude/timing comparisons, separate between-hitter and within-session associations, and prediction of published maximum bat speed.
+- The executed Dataset v1 run retained 642 swings from 97 hitters; timing-complete primary models used 641 swings. Body/bat control MAE was 3.468 mph, versus 3.526 mph with separation magnitude and timing. Paired improvement was -0.058 mph (conditional hitter-bootstrap 95% interval -0.196 to +0.083), so added predictive value is not established.
+- Greater separation was associated with higher speed within sessions, but this does not establish a coaching effect. Timing associations were less clear. Axial-angle differences and published relative torso–pelvis rotation are compared explicitly rather than treated as interchangeable.
+- Includes hitter-disjoint nested validation, joint within-session regressions, threshold/filter/window sensitivities, duration and convention audits, and an HTML report. The code-only notebook retains its executed outputs and has no Python comments. No raw C3D download is required.
+
+See the [study guide](docs/separation_bat_speed.md) for definitions, findings, setup, validation and limits.
+
 ## Repository Structure
 
 ```text
@@ -203,7 +213,9 @@ baseball-biomechanics-analysis/
 │       ├── 14_stride_movement_consistency.ipynb
 │       ├── 16_individual_swing_fingerprints.ipynb
 │       ├── 17_lead_hand_path_shape.ipynb
-│       └── 18_lower_body_force_proxies.ipynb
+│       ├── 18_lower_body_force_proxies.ipynb
+│       ├── 19_rotation_onset_orientation.ipynb
+│       └── 20_separation_bat_speed.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
