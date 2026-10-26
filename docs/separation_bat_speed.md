@@ -164,38 +164,102 @@ models **within that cohort**; differences from full-cohort raw errors are not a
 paired screening benefit. Predictive sensitivities use one seeded CV repeat.
 An interior-peak predictive refit runs only if the screen changes eligibility.
 
-## Reviewed Dataset v1 findings
+## Matched sensor and definition robustness audit
 
-The executed run retained **642 swings from 97 hitters**; 27 swings had missing or
-inconsistent events and eight had invalid event chronology. One retained swing
-had an unavailable onset lag. Primary grouped prediction used 641 swings from
-97 hitters, and Blast prediction used 612 swings from 96 hitters.
+Maximum and plant separation are compared on the same complete swings under the
+axial-angle-difference and relative torso–pelvis definitions, against published
+maximum, contact and Blast speed. Eligibility requires all three outcomes, both
+magnitude metrics under both definitions, and at least three complete swings per
+hitter/session/side. The reviewed common cohort contains 610 swings from 94 hitters.
+Missing outcomes are never filled from another measurement system.
 
-For maximum bat speed, body/bat controls had held-out hitter-weighted MAE of
-**3.468 mph**, versus **3.526 mph** after adding magnitude and timing. Paired
-improvement was **-0.058 mph** (conditional 95% interval **-0.196 to +0.083**).
-Adding separation to controls plus segment peak rates changed MAE by +0.007 mph
-(interval -0.134 to +0.144). Neither establishes added predictive value.
+Regressions center predictors and outcomes within session/side, adjust centered
+plant-to-contact duration and weight hitters equally. Two thousand whole-hitter
+bootstrap samples refit the centered regressions. Identical resampling draws
+preserve paired definition/sensor comparisons. Per-hitter sufficient statistics
+reproduce direct weighted least squares; removing a hitter's contribution refits
+the slope exactly. Numerical checks compare these calculations with direct fits.
+Omission sign stability does not mean every omitted-sample confidence interval
+excludes zero.
 
-Within-session, the separate maximum-separation model estimated **+0.258 mph per
-degree** (hitter-clustered 95% interval +0.153 to +0.363), and plant separation
-estimated +0.191 mph per degree (+0.092 to +0.290). Both survived their five-test
-FDR family. These are conditional observational slopes, not effects of increasing
-separation. The separate timing-of-maximum association did not survive its FDR
-adjustment; onset and velocity-peak lag associations were also uncertain. In the joint within-session model, maximum separation remained associated with
-speed (+0.295 mph/degree; interval +0.137 to +0.454), and earlier maximum
-separation had a conditional association (+0.037 mph per additional ms before
-contact; interval +0.009 to +0.065; FDR q=0.0245). These differ from the separate
-feature estimates and should not be interpreted as independent replications.
-Measurement-sensitivity estimates are exported to assess dependence on definitions.
+FDR adjustment covers six cluster-robust coefficient tests separately for maximum
+and plant separation. Paired slope contrasts are exploratory, without multiplicity
+adjustment. They are not external replications or causal comparisons.
 
-Relative rotation shifted maximum-separation timing by a paired median **16.6 ms**
-and gave hitter timing-rank agreement of **0.770** with the axial-angle difference.
-The definitions should not be used interchangeably. Relative-rotation and duration
-predictive checks did not establish that adding separation improves generalization.
-Short sessions, limited athlete coverage and unmeasured pitch/impact context limit
-player-level interpretation. No universal ideal separation or timing target is
-established.
+## Adjustment for segment peak angular velocities
+
+The same matched cohort is checked for complete pelvis/torso peak rates. In the
+reviewed run all 610 swings and 94 hitters remain. Each magnitude/definition/outcome
+combination is fitted twice: separation plus duration, and separation plus duration
+plus both segment peak angular velocities. All variables are centered within the
+same session/side groups and hitters remain equally weighted.
+
+Duration and velocity columns are rescaled by fixed constants for numerical
+conditioning; the separation slope remains in mph per degree. Two thousand paired
+whole-hitter bootstrap samples refit both models. Slopes, paired changes, omission
+ranges and design diagnostics (condition number, remaining separation variance and
+VIF) are exported. Full-rank and direct-fit equivalence checks run in the notebook.
+FDR covers six tests within each magnitude/model family. Paired slope-change
+intervals remain exploratory. Conditioning on contemporaneous rates changes the
+association being estimated; this is not causal mediation or proof of a mechanism.
+
+## Final Dataset v1 findings
+
+The main extraction retained **642 swings from 97 hitters**; 27 swings had missing
+or inconsistent events and eight had invalid chronology. One retained swing had
+an unavailable onset lag. Primary grouped prediction used 641 swings from 97
+hitters; Blast prediction used 612 swings from 96 hitters. The matched robustness
+and velocity-adjustment audits used **610 swings from 94 hitters**. These cohorts
+answer different questions and should not be combined as independent evidence.
+
+### Magnitude: consistent within-session association
+
+After adjusting duration and both segment peak rates on the matched cohort:
+
+| Separation definition | Outcome | Slope (mph/degree) | 95% hitter-bootstrap interval | FDR q |
+|---|---|---:|---|---:|
+| Axial-angle difference | Published maximum speed | +0.289 | +0.196 to +0.402 | <0.001 |
+| Axial-angle difference | Blast speed | +0.227 | +0.059 to +0.394 | 0.013 |
+| Relative torso–pelvis rotation | Published maximum speed | +0.241 | +0.145 to +0.381 | <0.001 |
+| Relative torso–pelvis rotation | Blast speed | +0.186 | +0.033 to +0.351 | 0.021 |
+
+All four coefficient directions remained positive after omitting each hitter.
+Contact-speed results were also positive. Within these sessions, greater maximum
+separation was associated with higher speed across the tested definitions and
+measurement systems, including after conditioning on segment rotation rates.
+This does not establish an individual response to increasing separation.
+
+### Timing: sensitive to the definition
+
+The separate duration-adjusted within-session slope for earlier maximum separation
+was +0.030 mph/ms with the axial-angle difference (hitter-clustered interval +0.002
+to +0.059), versus +0.004 mph/ms with relative rotation (-0.008 to +0.015). The
+native separate timing test did not survive its five-test FDR family. A conditional
+joint-model timing association was present for the native definition, but remains
+exploratory and does not establish a general timing target.
+
+Relative rotation shifted peak-separation timing by a paired median 16.6 ms and
+gave hitter timing-rank agreement of 0.770 with the axial-angle difference.
+The definitions are not interchangeable.
+
+### Prediction: no clear added value
+
+For published maximum speed, body/bat controls had held-out hitter-weighted MAE
+of **3.468 mph**, versus **3.526 mph** with magnitude and timing. Paired improvement
+was **-0.058 mph** (conditional 95% interval **-0.196 to +0.083**). Controls plus
+segment peak rates had MAE of 3.328 mph, versus 3.321 mph after adding separation;
+paired improvement was +0.007 mph (interval -0.134 to +0.144). Neither comparison
+establishes added predictive value. Conditional error intervals and refitted
+association intervals quantify different uncertainties.
+
+### Player-development interpretation
+
+Separation magnitude can support descriptive review of a hitter's swings alongside
+rotation rates and context. The study does not justify prescribing extra
+separation, a universal angle, a timing target or an expected mph gain. Short
+sessions, restricted athlete coverage, shared measurement systems, measurement
+error and unmeasured pitch/impact context limit inference. Omission stability does
+not establish test–retest reliability, external validity or a coaching response.
 
 ## Outputs
 
@@ -205,7 +269,18 @@ matched measurement sensitivities, model errors, paired comparisons, held-out
 predictions, tuning choices, fold membership, cohort counts, input hashes and a
 self-contained `study_summary.html`. Figures go to
 `figures/separation_bat_speed/`. Both directories and raw inputs are ignored by Git.
-The notebook retains its executed tables and figures for review.
+The final nine-cell notebook retains its executed tables and figures for review.
+The closing evidence summary includes compact magnitude, timing and predictive
+comparisons, interpretation and scope. The generated HTML report leads with this
+summary and puts detailed tables in expandable supporting sections.
+
+Additional outputs include `robustness_matched_swings.csv`,
+`robustness_within_session_slopes.csv`, `robustness_hitter_omissions.csv`, paired
+sensor/definition contrasts and bootstrap arrays; velocity-adjusted slopes,
+matched cohort, paired changes, omissions and collinearity diagnostics; and
+`final_magnitude_summary.csv`, `final_timing_summary.csv`,
+`final_prediction_summary.csv` and `final_conclusions.txt`. Final evidence figures
+are `final_magnitude_evidence.png` and `final_timing_prediction.png`.
 
 Source definitions: [OBP hitting documentation](https://github.com/drivelineresearch/openbiomechanics/blob/main/baseball_hitting/README.md).
 Review the [OBP data license](https://github.com/drivelineresearch/openbiomechanics/blob/main/LICENSE-DATA.md)

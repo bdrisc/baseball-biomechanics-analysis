@@ -163,3 +163,11 @@ processed `session_swing` IDs. Run All writes audits, grouped validation,
 associations, sensitivities and an HTML summary under
 `results/separation_bat_speed/`, with figures under `figures/separation_bat_speed/`.
 See [the study guide](../docs/separation_bat_speed.md).
+
+The final Study 20 notebook additionally matches both separation definitions and
+all three speed measurements on a common complete cohort, requires at least three
+swings per hitter/session/side, and repeats the association analysis conditioning
+on both segment peak rates. Refitted hitter bootstraps, paired contrasts, omission
+checks and design diagnostics remain local generated outputs. The notebook retains
+its executed final evidence summary and rebuilds an HTML report with supporting
+appendices on Run All.

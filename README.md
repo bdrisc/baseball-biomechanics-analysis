@@ -183,12 +183,13 @@ See the [force-proxy study guide](docs/lower_body_force_proxies.md) for model co
 
 ### 20. Pelvis–Torso Separation Magnitude, Timing & Bat Speed
 
-- Extends Study 06's onset measurements and Study 09's phase models with focused magnitude/timing comparisons, separate between-hitter and within-session associations, and prediction of published maximum bat speed.
-- The executed Dataset v1 run retained 642 swings from 97 hitters; timing-complete primary models used 641 swings. Body/bat control MAE was 3.468 mph, versus 3.526 mph with separation magnitude and timing. Paired improvement was -0.058 mph (conditional hitter-bootstrap 95% interval -0.196 to +0.083), so added predictive value is not established.
-- Greater separation was associated with higher speed within sessions, but this does not establish a coaching effect. Timing associations were less clear. Axial-angle differences and published relative torso–pelvis rotation are compared explicitly rather than treated as interchangeable.
-- Includes hitter-disjoint nested validation, joint within-session regressions, threshold/filter/window sensitivities, duration and convention audits, and an HTML report. The code-only notebook retains its executed outputs and has no Python comments. No raw C3D download is required.
+- The final executed study separates within-session associations, between-hitter comparisons and prediction for held-out hitters. Main measurements retained 642 swings from 97 hitters; the matched definition/sensor audit retained 610 swings from 94 hitters.
+- Maximum separation had positive within-session associations with published maximum and Blast speed under both axial-angle-difference and relative-rotation definitions. After conditioning on duration and pelvis/torso peak angular velocities, slopes ranged from +0.186 to +0.289 mph per degree; all four hitter-bootstrap intervals were above zero and survived their FDR family. No single-hitter omission reversed the coefficient direction. These are observational associations, not coaching effects.
+- Timing was definition-sensitive: the separate within-session slope for earlier maximum separation was +0.030 mph/ms with the axial-angle difference, versus +0.004 mph/ms with relative rotation; the latter interval included zero. A general timing target is not established.
+- Separation did not clearly improve held-out prediction. Body/bat control MAE was 3.468 mph, versus 3.526 mph with magnitude and timing; paired improvement was -0.058 mph (conditional 95% interval -0.196 to +0.083). The strongest magnitude associations do not establish a reliable predictive gain or a causal benefit from increasing separation.
+- The final nine-cell notebook retains executed tables and figures, a consolidated evidence summary and supporting analyses. Run All produces an HTML report with expandable appendices. It is code-only, has no Python comments and requires no raw C3D download.
 
-See the [study guide](docs/separation_bat_speed.md) for definitions, findings, setup, validation and limits.
+See the [study guide](docs/separation_bat_speed.md) for definitions, matched comparisons, inference procedures, validation and interpretation.
 
 ## Repository Structure
 
