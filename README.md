@@ -27,6 +27,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 
 | Lower-Body Movement Strategies & Ground Reaction Force Estimation | Do lower-body kinematics add predictive information beyond modeled COM movement for selected pre-contact force measures in unseen hitters? | Hitting joint angles, modeled COM and other landmarks, force plates, metadata, and POI context | [View notebook](notebooks/hitting/18_lower_body_force_proxies.ipynb) |
 | Pelvis–Torso Separation & Bat Speed | Do separation magnitude and timing relate to maximum bat speed between hitters, within sessions, and in held-out hitter models? | Hitting angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/20_separation_bat_speed.ipynb) |
+| Similar Velocity, Different Deliveries | How far apart are the delivery profiles of pitchers with similar fastball velocity relative to variation across their own pitches? | Pitching joint angles, metadata, and POI metrics | [View notebook](notebooks/pitching/21_fastball_delivery_styles.ipynb) |
 
 ## Key Findings
 
@@ -191,6 +192,12 @@ See the [force-proxy study guide](docs/lower_body_force_proxies.md) for model co
 
 See the [study guide](docs/separation_bat_speed.md) for definitions, matched comparisons, inference procedures, validation and interpretation.
 
+### 21. Similar Velocity, Different Deliveries
+
+- The primary analysis used 381 fastballs from 89 pitchers. Among 451 pairs across 84 pitchers within 1 mph of one another, 95% of matches exceeded both pitchers’ within-session movement benchmarks after weighting pitchers equally.
+- The 86.8 vs. 87.5 mph example fell at the 95.8th percentile of delivery distance among matched pairs. No candidate clustering met the study’s separation and stability screens.
+- The within-pitcher benchmark compares disjoint subsets of each pitcher’s recorded pitches. The sample is mostly collegiate and includes one session per pitcher.
+
 ## Repository Structure
 
 ```text
@@ -200,7 +207,8 @@ baseball-biomechanics-analysis/
 │   │   ├── 01_kinematic_sequencing.ipynb
 │   │   ├── 02_trunk_stability_release.ipynb
 │   │   ├── 08_pitching_phase_decomposition.ipynb
-│   │   └── 15_head_trunk_release_consistency.ipynb
+│   │   ├── 15_head_trunk_release_consistency.ipynb
+│   │   └── 21_fastball_delivery_styles.ipynb
 │   └── hitting/
 │       ├── 03_hinge_integrity.ipynb
 │       ├── 04_posture_contact_consistency.ipynb
@@ -262,6 +270,8 @@ Study 16 is a standalone, code-only hitting notebook with no Python comments and
 Study 17 is a standalone, code-only hitting notebook with no Python comments and cleared outputs. It uses wrist/hip landmarks and metadata, with optional POI context. Missing Dataset v1 inputs download automatically; the roughly 66 MB landmark archive is verified before extraction and input CSV hashes are recorded. Run All creates measurements, profiles, filter/window/landmark sensitivities, duration and eligibility audits, figures, and a self-contained HTML profile report under `results/lead_hand_path_shape/` and `figures/lead_hand_path_shape/`. See the [study guide](docs/lead_hand_path_shape.md). Measurement checks run with `python -m unittest discover -s tests -p test_lead_hand_path_shape.py -v`.
 
 Study 18 is a standalone, code-only hitting notebook with no Python comments. Its completed run is saved in the notebook so GitHub displays the charts, tables, and closing report. It automatically downloads missing Dataset v1 joint-angle, landmark, and force-plate archives (about 168 MB total), metadata, and POI files. Archive checksums and local input hashes are recorded. Run All generates grouped model comparisons, force-signal audits, omission sensitivities, movement profiles, figures, and a consolidated HTML summary under `results/lower_body_force_proxies_v3/` and `figures/lower_body_force_proxies_v3/`. Numerical and fold checks run inside the notebook. See [the study guide](docs/lower_body_force_proxies.md).
+
+Study 21 runs independently. It reuses local Dataset v1 pitching joint angles, metadata, and POI metrics or downloads missing inputs. Run All generates CSVs under `results/fastball_delivery_styles/` and plots under `figures/fastball_delivery_styles/`.
 
 ## Methods and Interpretation
 
