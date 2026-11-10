@@ -261,3 +261,6 @@ figures/lead_hand_path_shape/
 # Separation and bat speed study
 results/separation_bat_speed/
 figures/separation_bat_speed/
+# Contact point stability generated outputs
+results/contact_point_stability/
+figures/contact_point_stability/

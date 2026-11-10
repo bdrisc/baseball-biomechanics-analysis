@@ -24,10 +24,10 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Head & Trunk Stability and Release Consistency | How do head/trunk repeatability and pelvis translation relate to hand-release positional clustering, and does head stability add held-out predictive information? | Pitching C3D head/pelvis markers, joint angles, landmarks, metadata, and POI | [View notebook](notebooks/pitching/15_head_trunk_release_consistency.ipynb) |
 | Individual Swing Consistency Profiles | How repeatable are a hitter’s pelvis and torso angle trajectories across reps, and how sensitive are profiles to phase duration? | Hitting joint angles, metadata, and optional POI context | [View notebook](notebooks/hitting/16_individual_swing_fingerprints.ipynb) |
 | Lead-Hand Path Shape Through Rotation | How much does the lead wrist descend and travel around the hitter before contact, and how repeatable is its trajectory? | Hitting wrist/hip landmarks, metadata, and optional POI outcomes | [View notebook](notebooks/hitting/17_lead_hand_path_shape.ipynb) |
-
 | Lower-Body Movement Strategies & Ground Reaction Force Estimation | Do lower-body kinematics add predictive information beyond modeled COM movement for selected pre-contact force measures in unseen hitters? | Hitting joint angles, modeled COM and other landmarks, force plates, metadata, and POI context | [View notebook](notebooks/hitting/18_lower_body_force_proxies.ipynb) |
 | Pelvis–Torso Separation & Bat Speed | Do separation magnitude and timing relate to maximum bat speed between hitters, within sessions, and in held-out hitter models? | Hitting angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/20_separation_bat_speed.ipynb) |
 | Similar Velocity, Different Deliveries | How far apart are the delivery profiles of pitchers with similar fastball velocity relative to variation across their own pitches? | Pitching joint angles, metadata, and POI metrics | [View notebook](notebooks/pitching/21_fastball_delivery_styles.ipynb) |
+| Contact Depth and Hand Position at Impact | How much does contact depth vary within a hitter-session, and how does hand depth change when contact is farther forward? | Hitting landmarks, metadata, and HitTrax | [View notebook](notebooks/hitting/22_contact_point_stability.ipynb) |
 
 ## Key Findings
 
@@ -198,6 +198,13 @@ See the [study guide](docs/separation_bat_speed.md) for definitions, matched com
 - The 86.8 vs. 87.5 mph example fell at the 95.8th percentile of delivery distance among matched pairs. No candidate clustering met the study’s separation and stability screens.
 - The within-pitcher benchmark compares disjoint subsets of each pitcher’s recorded pitches. The sample is mostly collegiate and includes one session per pitcher.
 
+### 22. Contact Depth and Hand Position at Impact
+
+- The Dataset v1 run found 515 usable HitTrax impact locations. It flagged 89 all-zero impact triples as likely missing measurements. The matched pitch-location comparison used 452 swings from 68 hitters.
+- Within hitter-sessions, every 10 HitTrax units of forward contact depth corresponded to 3.58 cm more forward hand position relative to the pelvis in the raw comparison and 3.75 cm (95% conditional interval 2.66 to 5.27 cm) after adjustment for reported pitch location.
+- The median within-session depth IQR across profiles was 4.36 HitTrax units before adjustment and 4.09 after adjustment. Reported pitch location closely tracked the corresponding impact coordinates, so these adjustments describe relationships conditional on the exported fields.
+- The two-component mixture improved held-out fit but fell below the resampling stability and minimum component-size thresholds. The notebook shows the continuous contact map and overlays a forward and deep swing from one hitter.
+
 ## Repository Structure
 
 ```text
@@ -224,7 +231,8 @@ baseball-biomechanics-analysis/
 │       ├── 17_lead_hand_path_shape.ipynb
 │       ├── 18_lower_body_force_proxies.ipynb
 │       ├── 19_rotation_onset_orientation.ipynb
-│       └── 20_separation_bat_speed.ipynb
+│       ├── 20_separation_bat_speed.ipynb
+│       └── 22_contact_point_stability.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -272,6 +280,8 @@ Study 17 is a standalone, code-only hitting notebook with no Python comments and
 Study 18 is a standalone, code-only hitting notebook with no Python comments. Its completed run is saved in the notebook so GitHub displays the charts, tables, and closing report. It automatically downloads missing Dataset v1 joint-angle, landmark, and force-plate archives (about 168 MB total), metadata, and POI files. Archive checksums and local input hashes are recorded. Run All generates grouped model comparisons, force-signal audits, omission sensitivities, movement profiles, figures, and a consolidated HTML summary under `results/lower_body_force_proxies_v3/` and `figures/lower_body_force_proxies_v3/`. Numerical and fold checks run inside the notebook. See [the study guide](docs/lower_body_force_proxies.md).
 
 Study 21 runs independently. It reuses local Dataset v1 pitching joint angles, metadata, and POI metrics or downloads missing inputs. Run All generates CSVs under `results/fastball_delivery_styles/` and plots under `figures/fastball_delivery_styles/`.
+
+Study 22 reuses Dataset v1 hitting landmarks, metadata, and HitTrax files or downloads missing inputs. The notebook includes executed tables and three figures. Run All writes CSVs and a run manifest under `results/contact_point_stability/` and plots under `figures/contact_point_stability/`.
 
 ## Methods and Interpretation
 
