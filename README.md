@@ -1,6 +1,6 @@
 # Baseball Biomechanics Analysis
 
-This repository contains applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, individual swing consistency profiles, lead-hand path shape through rotation, and lower-body movement strategies and ground reaction force estimation using raw and processed motion-capture, force-plate, and point-of-impact data.
+This repository contains applied baseball biomechanics studies built with Python and Driveline Baseball's public [OpenBiomechanics Project](https://github.com/drivelineresearch/openbiomechanics). The analyses examine pitching sequencing, pitching release consistency, hitting posture, contact-point consistency, posture-change timing, hitting pelvis–torso rotation and uprighting onset, head movement and repeatability, delivery-phase profiles, swing-phase profiles, stride movement consistency, head/trunk/pelvis release-position repeatability, individual swing consistency profiles, lead-hand path shape through rotation, wrist-based estimates of barrel direction at contact, and lower-body movement strategies and ground reaction force estimation using raw and processed motion-capture, force-plate, and point-of-impact data.
 
 The purpose of the project is to turn biomechanical time-series data into interpretable measures that can support player evaluation, research, and player-development conversations.
 
@@ -28,6 +28,7 @@ The purpose of the project is to turn biomechanical time-series data into interp
 | Pelvis–Torso Separation & Bat Speed | Do separation magnitude and timing relate to maximum bat speed between hitters, within sessions, and in held-out hitter models? | Hitting angles, angular velocities, metadata, and POI | [View notebook](notebooks/hitting/20_separation_bat_speed.ipynb) |
 | Similar Velocity, Different Deliveries | How far apart are the delivery profiles of pitchers with similar fastball velocity relative to variation across their own pitches? | Pitching joint angles, metadata, and POI metrics | [View notebook](notebooks/pitching/21_fastball_delivery_styles.ipynb) |
 | Contact Depth and Hand Position at Impact | How much does contact depth vary within a hitter-session, and how does hand depth change when contact is farther forward? | Hitting landmarks, metadata, and HitTrax | [View notebook](notebooks/hitting/22_contact_point_stability.ipynb) |
+| Lead-Wrist Motion and Barrel Direction at Contact | How much does lead-wrist motion improve estimates of measured barrel direction for held-out hitters? | Hitting wrist/hip landmarks, metadata, POI metrics, and HitTrax | [View notebook](notebooks/hitting/23_hand_path_barrel_direction.ipynb) |
 
 ## Key Findings
 
@@ -205,6 +206,12 @@ See the [study guide](docs/separation_bat_speed.md) for definitions, matched com
 - The median within-session depth IQR across profiles was 4.36 HitTrax units before adjustment and 4.09 after adjustment. Reported pitch location closely tracked the corresponding impact coordinates, so these adjustments describe relationships conditional on the exported fields.
 - The two-component mixture improved held-out fit but fell below the resampling stability and minimum component-size thresholds. The notebook shows the continuous contact map and overlays a forward and deep swing from one hitter.
 
+### 23. Lead-Wrist Motion and Barrel Direction at Contact
+
+- Across 677 swings from 98 hitters, five-fold validation held out whole hitters. The full wrist model reduced hitter-weighted MAE from 4.59° to 4.04° for vertical attack angle and from 6.73° to 5.37° for horizontal attack direction, compared with training-fold averages. The paired reductions were 0.55° vertically (95% conditional interval 0.18° to 0.92°) and 1.36° horizontally (0.84° to 1.88°).
+- On 515 swings with valid HitTrax impact coordinates, adding wrist features to impact depth and height reduced horizontal MAE by 0.95° (95% conditional interval 0.38° to 1.54°). The vertical gain was 0.21° (−0.10° to 0.50°). Late wrist direction accounted for most of the wrist-only gain, with uncertain additional value from early depth and vertical drop.
+- The same-hitter overlay marks the final 20 ms and draws the measured barrel direction as an arrow at each wrist endpoint. The wrist rose into contact on both swings while the barrel descended on the deeper-contact swing. The analysis uses lab-tracked wrist and hip landmarks with an annotated contact time.
+
 ## Repository Structure
 
 ```text
@@ -232,7 +239,8 @@ baseball-biomechanics-analysis/
 │       ├── 18_lower_body_force_proxies.ipynb
 │       ├── 19_rotation_onset_orientation.ipynb
 │       ├── 20_separation_bat_speed.ipynb
-│       └── 22_contact_point_stability.ipynb
+│       ├── 22_contact_point_stability.ipynb
+│       └── 23_hand_path_barrel_direction.ipynb
 ├── src/
 │   └── obp_utils.py
 ├── data/
@@ -282,6 +290,8 @@ Study 18 is a standalone, code-only hitting notebook with no Python comments. It
 Study 21 runs independently. It reuses local Dataset v1 pitching joint angles, metadata, and POI metrics or downloads missing inputs. Run All generates CSVs under `results/fastball_delivery_styles/` and plots under `figures/fastball_delivery_styles/`.
 
 Study 22 reuses Dataset v1 hitting landmarks, metadata, and HitTrax files or downloads missing inputs. The notebook includes executed tables and three figures. Run All writes CSVs and a run manifest under `results/contact_point_stability/` and plots under `figures/contact_point_stability/`.
+
+Study 23 reuses Dataset v1 hitting landmarks, metadata, POI metrics, and HitTrax files or downloads missing inputs. The code-only notebook includes executed tables and two figures. Run All writes per-swing features, held-out predictions, sensitivity results, figures, and a run manifest under `results/hand_path_barrel_direction/`.
 
 ## Methods and Interpretation
 
